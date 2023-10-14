@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  image     String?
+  roles     Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pallet {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  palletId String  @unique
+  product  String
+  size     String?
+  pieces   Int?
+  boxBrand String?
+
+  position String[]
+  camara   String
+  shipped  Boolean  @default(false)
+  selected Boolean  @default(false)
+
+  tagsId String[] @db.ObjectId
+  tags   Tag[]    @relation(fields: [tagsId], references: [name])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
+  READER
+}
+
+model BoxBrand {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  code String
+}
+
+model Product {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  code     String
+  calibers String[]
+}
+
+model Camara {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  code       String @unique
+  shelvesNum Int?
+  heights    Int?
+  perShelf   Int?
+  perHeight  Int?
+}
+
+model Tag {
+  name        String  @id @default(auto()) @map("_id") @db.ObjectId
+  color       String
+  description String?
+
+  palletsId String[] @db.ObjectId
+  pallets   Pallet[] @relation(fields: [palletsId], references: [id])
+}
