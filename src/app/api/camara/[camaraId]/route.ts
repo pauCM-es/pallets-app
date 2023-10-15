@@ -5,7 +5,6 @@ import prisma from "@/libs/prismadb";
 export const GET = async (request: Request, { params }: { params: Params }) => {
 	try {
 		const { camaraId } = params;
-		console.log("GET camara by id", camaraId);
 
 		const camara = await prisma.camara.findUnique({
 			where: {
@@ -15,11 +14,11 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 
 		const pallets = await prisma.pallet.findMany({
 			where: {
-				camaraCode: camaraId,
+				camaraCode: camara?.code,
 			},
 		});
 
-		return NextResponse.json(camara);
+		return NextResponse.json({ camara, pallets });
 	} catch (error: any) {
 		return new NextResponse("Internal error", { status: 500 });
 	}
