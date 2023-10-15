@@ -6,7 +6,7 @@ import PalletItem from './PalletItem'
 
 interface ShelfProps {
   title: string,
-  pallets: Pallet[] | undefined
+  pallets: (Pallet | undefined)[]
 }
 
 const Shelf = ({ title, pallets }: ShelfProps) => {
@@ -14,7 +14,7 @@ const Shelf = ({ title, pallets }: ShelfProps) => {
     <div className='shelf'>
       <div className="shelf__title">{ title }</div>
       <div className="shelf__content">{
-        pallets?.map(pallet => <PalletItem pallet={ pallet } />)
+        pallets?.map(pallet => pallet && <PalletItem pallet={ pallet } />)
       }</div>
     </div>
   )

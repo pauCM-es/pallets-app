@@ -1,6 +1,7 @@
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { NextResponse } from "next/server";
 import prisma from "@/libs/prismadb";
+import { PalletsOnShelf } from "@/types/prisma.types";
 
 export const GET = async (request: Request, { params }: { params: Params }) => {
 	try {
@@ -11,15 +12,30 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 				code: camaraId,
 			},
 		});
-
-		const pallets = await prisma.pallet.findMany({
+		const shelves = await prisma.shelf.findMany({
+			where: {
+				camaraId,
+			},
+		});
+		const palletsOnCamara = await prisma.pallet.findMany({
 			where: {
 				camaraCode: camara?.code,
 			},
 		});
+		let palletsOnShelves: PalletsOnShelf[] = [];
+		shelves.forEach((shelf) => {
+			const fullPallets = shelf.palletIds.map((id) => {
+				return palletsOnCamara.find((pallet) => pallet.numberId === id);
+			});
+			palletsOnShelves.push({
+				shelfId: shelf.name,
+				pallets: fullPallets,
+			});
+		});
+		console.log(palletsOnCamara);
 
-		return NextResponse.json({ camara, pallets });
+		return NextResponse.json({ palletsOnShelves });
 	} catch (error: any) {
-		return new NextResponse("Internal error", { status: 500 });
+		return new NextResponse(`Internal error: ${error}`, { status: 500 });
 	}
 };

@@ -1,6 +1,7 @@
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
 import Shelf from "@/components/Shelf"
+import { PalletsOnShelf } from "@/types/prisma.types"
 
 
 
@@ -14,18 +15,22 @@ const CamaraIdPage = async ({
   params: Params
 }) => {
 
-  const { camara, pallets } = await getCamaraById(params.camaraId)
+  const res = await getCamaraById(params.camaraId)
+  const { palletsOnShelves } = res.data
+
 
 
   return (
     <section>
       <EmptySpace />
-      { camara?.shelves?.map(shelf => (
-        <Shelf
-          title={ shelf?.name }
-          pallets={ pallets }
-        // pallets={ shelf?.palletIds?.map(id => pallets.find(pallet => pallet.numberId === id)) }
-        />)) }
+      { palletsOnShelves?.map((shelf: PalletsOnShelf) => {
+        return (
+          <Shelf
+            key={ shelf.shelfId }
+            title={ shelf.shelfId }
+            pallets={ shelf.pallets }
+          />)
+      }) }
     </section>
   )
 }

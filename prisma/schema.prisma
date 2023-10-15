@@ -67,9 +67,14 @@ model Camara {
   shelves Shelf[]
 }
 
-type Shelf {
-  name      String
+model Shelf {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+
   palletIds String[]
+
+  camaraId String
+  camara   Camara @relation(fields: [camaraId], references: [code])
 }
 
 model Tag {
