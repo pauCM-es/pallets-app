@@ -12,7 +12,12 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 				code: camaraId,
 			},
 		});
-		console.log(camara);
+
+		const pallets = await prisma.pallet.findMany({
+			where: {
+				camaraCode: camaraId,
+			},
+		});
 
 		return NextResponse.json(camara);
 	} catch (error: any) {

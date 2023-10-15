@@ -8,32 +8,32 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   @unique
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
   image     String?
-  roles     Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  roles     Role      @default(USER)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Pallet {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  palletId String  @unique
+  numberId String  @unique
   product  String
   size     String?
   pieces   Int?
   boxBrand String?
 
-  position String[]
-  camara   String
-  shipped  Boolean  @default(false)
-  selected Boolean  @default(false)
+  position   Int[]
+  camaraCode String
+  shipped    Boolean @default(false)
+  selected   Boolean @default(false)
 
-  tagsId String[] @db.ObjectId
-  tags   Tag[]    @relation(fields: [tagsId], references: [name])
+  tagsId String[] @default([]) @db.ObjectId
+  tags   Tag[]    @relation(fields: [tagsId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum Role {
@@ -44,21 +44,21 @@ enum Role {
 
 model BoxBrand {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
+  code String @unique
   name String
-  code String
 }
 
 model Product {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  code     String   @unique
   name     String
-  code     String
   calibers String[]
 }
 
 model Camara {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
   code       String @unique
+  name       String
   shelvesNum Int?
   heights    Int?
   perShelf   Int?
@@ -66,7 +66,8 @@ model Camara {
 }
 
 model Tag {
-  name        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
   color       String
   description String?
 
