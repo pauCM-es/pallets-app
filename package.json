@@ -17,6 +17,7 @@
 		"devextreme-react": "23.1.5",
 		"next": "13.5.4",
 		"react": "^18",
+		"react-beautiful-dnd": "^13.1.1",
 		"react-dom": "^18",
 		"react-hook-form": "^7.47.0",
 		"react-hot-toast": "^2.4.1"

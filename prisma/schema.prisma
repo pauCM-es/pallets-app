@@ -63,6 +63,13 @@ model Camara {
   heights    Int?
   perShelf   Int?
   perHeight  Int?
+
+  shelves Shelf[]
+}
+
+type Shelf {
+  name      String
+  palletIds String[]
 }
 
 model Tag {
