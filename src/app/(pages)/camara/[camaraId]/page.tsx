@@ -1,8 +1,8 @@
+import { DragDropContext } from 'react-beautiful-dnd'
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
 import Shelf from "@/components/Shelf"
 import { PalletsOnShelf } from "@/types/prisma.types"
-
 
 
 interface Params {
@@ -22,15 +22,8 @@ const CamaraIdPage = async ({
 
   return (
     <section>
-      <EmptySpace />
-      { palletsOnShelves?.map((shelf: PalletsOnShelf) => {
-        return (
-          <Shelf
-            key={ shelf.shelfId }
-            title={ shelf.shelfId }
-            pallets={ shelf.pallets }
-          />)
-      }) }
+      <EmptySpace palletsOnShelves={ palletsOnShelves } />
+
     </section>
   )
 }

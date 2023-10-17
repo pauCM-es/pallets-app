@@ -22,7 +22,11 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 				camaraCode: camara?.code,
 			},
 		});
+
+		//Array of objects with each shelf and its pallets on each of them.
+		//Ready to consume by the front and the drag and drop feature.
 		let palletsOnShelves: PalletsOnShelf[] = [];
+
 		shelves.forEach((shelf) => {
 			const fullPallets = shelf.palletIds.map((id) => {
 				return palletsOnCamara.find((pallet) => pallet.numberId === id);
@@ -32,7 +36,6 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 				pallets: fullPallets,
 			});
 		});
-		console.log(palletsOnCamara);
 
 		return NextResponse.json({ palletsOnShelves });
 	} catch (error: any) {

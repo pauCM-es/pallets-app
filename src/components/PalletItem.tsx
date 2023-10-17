@@ -1,15 +1,19 @@
+'use client'
+
 import { Pallet } from '@prisma/client'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import "@/styles/PalletItem.style.scss"
+import { Draggable } from 'devextreme-react'
 
 interface PalletItemProps {
   pallet: Pallet
 }
 
 const PalletItem = ({ pallet }: PalletItemProps) => {
+
   return (
-    <section>
+    <section className='pallet'>
       <div>{ pallet.numberId }</div>
       <div className="pallet__data">
         <span className="product">{ pallet.product }</span>
@@ -19,5 +23,6 @@ const PalletItem = ({ pallet }: PalletItemProps) => {
     </section>
   )
 }
+
 
 export default PalletItem
