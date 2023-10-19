@@ -1,7 +1,5 @@
-import { DragDropContext } from 'react-beautiful-dnd'
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
-import Shelf from "@/components/Shelf"
 import { PalletsOnShelf } from "@/types/prisma.types"
 
 

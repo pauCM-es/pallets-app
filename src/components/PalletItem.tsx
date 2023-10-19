@@ -1,19 +1,26 @@
 'use client'
 
 import { Pallet } from '@prisma/client'
-import React, { ReactNode } from 'react'
+import React, { useEffect } from 'react'
 
 import "@/styles/PalletItem.style.scss"
-import { Draggable } from 'devextreme-react'
 
 interface PalletItemProps {
   pallet: Pallet
+  index: number
+  // ref: (element: HTMLElement | null) => void
+  // provided: DraggableProvided
 }
 
-const PalletItem = ({ pallet }: PalletItemProps) => {
+const PalletItem = ({ pallet, index }: PalletItemProps) => {
+  useEffect(() => {
+
+  }, [])
 
   return (
-    <section className='pallet'>
+    <section
+      className='pallet'
+    >
       <div>{ pallet.numberId }</div>
       <div className="pallet__data">
         <span className="product">{ pallet.product }</span>
@@ -22,6 +29,9 @@ const PalletItem = ({ pallet }: PalletItemProps) => {
       </div>
     </section>
   )
+
+
+
 }
 
 

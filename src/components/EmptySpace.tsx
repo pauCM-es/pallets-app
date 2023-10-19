@@ -1,21 +1,22 @@
 "use client"
 
 import { PalletsOnShelf } from '@/types/prisma.types'
-import React from 'react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import React, { useCallback, useState } from 'react'
 import Shelf from './Shelf'
+import '@/styles/EmptySpace.style.scss'
 
 
 const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: PalletsOnShelf[] }) => {
+  const [positions, setPositions] = useState(palletsOnShelves)
 
   const onDragEnd = () => {
-    //TODO
+
+    // const palletNumberDragged = res.draggableId
+    // const newPositions = positions.find((shelf, index) => shelf.shelfId === res.source.droppableId)
   }
 
   return (
-    <DragDropContext
-      onDragEnd={ () => { onDragEnd() } }
-    >
+    <section className="empty-space">
 
       { palletsOnShelves?.map((shelf: PalletsOnShelf) => {
         return (
@@ -25,7 +26,7 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: PalletsOnShelf[] }
             pallets={ shelf.pallets }
           />)
       }) }
-    </DragDropContext>
+    </section>
   )
 }
 
