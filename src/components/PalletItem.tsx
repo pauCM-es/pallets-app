@@ -4,22 +4,36 @@ import { Pallet } from '@prisma/client'
 import React, { useEffect } from 'react'
 
 import "@/styles/PalletItem.style.scss"
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface PalletItemProps {
   pallet: Pallet
-  index: number
-  // ref: (element: HTMLElement | null) => void
-  // provided: DraggableProvided
+  id: string
+
 }
 
-const PalletItem = ({ pallet, index }: PalletItemProps) => {
-  useEffect(() => {
+const PalletItem = ({ pallet, id }: PalletItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: id })
 
-  }, [])
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
 
   return (
     <section
       className='pallet'
+      ref={ setNodeRef }
+      { ...attributes }
+      { ...listeners }
+      style={ style }
     >
       <div>{ pallet.numberId }</div>
       <div className="pallet__data">
