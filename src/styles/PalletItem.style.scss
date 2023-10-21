@@ -1,6 +1,8 @@
+@import "variables.scss";
+
 .pallet {
 	border: 1px solid rgb(46, 47, 52);
-	width: 6rem;
+	width: var(--pallet-width);
 	aspect-ratio: 3/2;
 	background-color: whitesmoke;
 	border-radius: 0.25rem;
