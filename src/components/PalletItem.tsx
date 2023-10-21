@@ -6,10 +6,11 @@ import React, { useEffect } from 'react'
 import "@/styles/PalletItem.style.scss"
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { UniqueIdentifier } from '@dnd-kit/core'
 
 interface PalletItemProps {
   pallet: Pallet
-  id: string
+  id: string | UniqueIdentifier
 
 }
 
