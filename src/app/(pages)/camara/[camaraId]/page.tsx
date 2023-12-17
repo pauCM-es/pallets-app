@@ -1,6 +1,7 @@
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
 import { PalletsOnShelf } from "@/types/prisma.types"
+import { EmptyShelf } from "@/types/shelf.types"
 
 
 interface Params {
@@ -15,8 +16,6 @@ const CamaraIdPage = async ({
 
   const res = await getCamaraById(params.camaraId)
   const { palletsOnShelves } = res.data
-
-
 
   return (
     <section>

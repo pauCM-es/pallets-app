@@ -7,4 +7,16 @@
 	background-color: whitesmoke;
 	border-radius: 0.25rem;
 	margin: 0.5rem 0.25rem;
+	cursor: pointer;
+
+	&:hover {
+		background-color: rgb(170, 209, 244);
+	}
+
+	&--empty {
+		background-color: transparent;
+		pointer-events: none;
+		border: none;
+		color: transparent;
+	}
 }

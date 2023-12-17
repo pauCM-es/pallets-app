@@ -29,12 +29,15 @@ export const GET = async (request: Request, { params }: { params: Params }) => {
 		let palletsOnShelves: PalletsOnShelf[] = [];
 
 		shelves.forEach((shelf) => {
-			const fullPallets = shelf.palletIds.map((id) => {
-				return palletsOnCamara.find((pallet) => pallet.numberId === id);
-			});
+			const fullPallets = shelf.palletIds
+				.map((id) => {
+					return palletsOnCamara.find((pallet) => pallet.numberId === id);
+				})
+				.filter((pallet) => pallet !== undefined);
+
 			palletsOnShelves.push({
 				shelfId: shelf.name,
-				pallets: fullPallets,
+				pallets: fullPallets as PalletsOnShelf["pallets"],
 			});
 		});
 
