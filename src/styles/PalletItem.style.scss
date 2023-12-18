@@ -11,6 +11,11 @@
 
 	&:hover {
 		background-color: rgb(170, 209, 244);
+		opacity: 0.4;
+	}
+
+	&--is-sorting {
+		background-color: rgb(118, 255, 255);
 	}
 
 	&--empty {
@@ -18,5 +23,6 @@
 		pointer-events: none;
 		border: none;
 		color: transparent;
+		user-select: none;
 	}
 }

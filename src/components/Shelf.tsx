@@ -16,23 +16,8 @@ interface ShelfProps {
 
 const Shelf = ({ children, title, id }: ShelfProps) => {
 
-  // const {
-  //   setNodeRef,
-  //   isOver,
-  //   over
-  // } = useDroppable({ id: id })
-
-  // useEffect(() => {
-  //   isOver && console.log("over", over)
-
-  // }, [isOver])
-
-
-
   return (
     <div className={ `shelf` }
-    // <div className={ `shelf ${isOver && "shelf--hover"}` }
-    // ref={ setNodeRef }
     >
       <div className="shelf__title">{ title }</div>
       <div className="shelf__content" >

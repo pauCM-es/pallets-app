@@ -1,7 +1,7 @@
 'use client'
 
 import { Pallet } from '@prisma/client'
-import React, { useEffect } from 'react'
+import React, { use, useEffect } from 'react'
 
 import "@/styles/PalletItem.style.scss"
 import { useSortable } from '@dnd-kit/sortable'
@@ -12,16 +12,16 @@ import { EmptyShelf } from '@/types/shelf.types'
 interface PalletItemProps {
   pallet: Pallet | EmptyShelf["pallets"][0]
   id: string | UniqueIdentifier
-
+  isActive?: boolean
 }
 
-const PalletItem = ({ pallet, id }: PalletItemProps) => {
+const PalletItem = ({ pallet, id, isActive }: PalletItemProps) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-    transition
+    transition,
   } = useSortable({ id: id })
 
   const style = {
@@ -36,7 +36,8 @@ const PalletItem = ({ pallet, id }: PalletItemProps) => {
   return (
     isTypePallet(pallet)
       ? <section
-        className='pallet'
+        id={ `pallet-${pallet.id}` }
+        className={ `pallet pallet${isActive ? "--is-sorting" : ""}` }
         ref={ setNodeRef }
         { ...attributes }
         { ...listeners }
@@ -51,6 +52,7 @@ const PalletItem = ({ pallet, id }: PalletItemProps) => {
       </section>
 
       : <section
+        id={ `placeholder-${id}` }
         className='pallet pallet--empty'
         ref={ setNodeRef }
       >

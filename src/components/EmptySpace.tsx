@@ -18,11 +18,6 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | 
   const [positions, setPositions] = useState<(PalletsOnShelf | EmptyShelf)[]>(palletsOnShelves)
   const [activePallet, setActivePallet] = useState<{ pallet: Pallet, indexOnShelf: number, shelfId: string } | null>(null)
 
-  useEffect(() => {
-    console.log("position change", positions.map(shelf => shelf.pallets.map(pallet => pallet.numberId)))
-
-  }, [positions])
-
 
   const getShelf = (shelfId: string): [PalletsOnShelf | EmptyShelf, number] | [undefined, undefined] => {
     const shelfFound = palletsOnShelves?.find(shelf => shelf.shelfId === shelfId)
@@ -145,6 +140,7 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | 
                       key={ pallet.numberId }
                       id={ pallet.numberId }
                       pallet={ pallet }
+                      isActive={ activePallet?.pallet.numberId === pallet.numberId }
                     />
                   )
                   : <PalletItem
