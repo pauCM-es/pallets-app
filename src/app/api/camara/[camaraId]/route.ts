@@ -2,7 +2,6 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { NextResponse } from "next/server";
 import prisma from "@/libs/prismadb";
 import { PalletsOnShelf } from "@/types/prisma.types";
-import { Pallet } from "@prisma/client";
 
 export const GET = async (request: Request, { params }: { params: Params }) => {
 	try {

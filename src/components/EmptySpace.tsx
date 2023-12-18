@@ -10,6 +10,7 @@ import PalletItem from './PalletItem'
 import { Pallet } from '@prisma/client'
 import { EmptyShelf } from '@/types/shelf.types'
 import { isShelfEmpty } from '@/types/utils.types'
+import { updateAfterMove } from '@/app/services/camara.service'
 
 
 const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | EmptyShelf)[] }) => {
@@ -17,7 +18,37 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | 
   const positionRef = useRef<(PalletsOnShelf | EmptyShelf)[]>(palletsOnShelves)
   const [positions, setPositions] = useState<(PalletsOnShelf | EmptyShelf)[]>(palletsOnShelves)
   const [activePallet, setActivePallet] = useState<{ pallet: Pallet, indexOnShelf: number, shelfId: string } | null>(null)
+  const [movement, setMovement] = useState<{
+    fromShelf: undefined | string,
+    toShelf: undefined | string
+  }>({
+    fromShelf: undefined,
+    toShelf: undefined
+  })
 
+  useEffect(() => {
+    if (!movement.fromShelf || !movement.toShelf) return
+
+    const shelvesInvolved = positions.filter(shelf => shelf.shelfId === movement.fromShelf || shelf.shelfId === movement.toShelf)
+      .map(shelf => {
+        if (shelf.pallets.length === 1 && shelf.pallets[0].numberId === 'empty') {
+          const mapShelf = { ...shelf, pallets: [] }
+          console.log(mapShelf)
+          return mapShelf as PalletsOnShelf
+        } else { return shelf }
+      })
+    console.log(shelvesInvolved)
+
+    updateAfterMove(shelvesInvolved as PalletsOnShelf[]).then(res => {
+      console.log(res)
+    }).catch(error => {
+      //TODO: undo movement.
+      console.log(error)
+    })
+
+    setMovement({ fromShelf: undefined, toShelf: undefined })
+
+  }, [movement])
 
   const getShelf = (shelfId: string): [PalletsOnShelf | EmptyShelf, number] | [undefined, undefined] => {
     const shelfFound = palletsOnShelves?.find(shelf => shelf.shelfId === shelfId)
@@ -45,6 +76,7 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | 
         indexOnShelf: index,
         shelfId: shelf
       })
+      setMovement(oldState => { return { ...oldState, fromShelf: shelf } })
     }
   }
 
@@ -109,8 +141,10 @@ const EmptySpace = ({ palletsOnShelves }: { palletsOnShelves: (PalletsOnShelf | 
   }
 
   const onDragEnd = (evt: DragEndEvent) => {
+    console.log(evt, positions, activePallet)
     setActivePallet(null)
     positionRef.current = positions
+    setMovement(oldState => { return { ...oldState, toShelf: activePallet?.shelfId } })
   }
 
   return (
