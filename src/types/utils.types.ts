@@ -14,3 +14,7 @@ export const isShelfEmpty = (
 	}
 	return result;
 };
+
+export type HalfPartial<T, P extends keyof T> = {
+	[Key in keyof T]: Key extends P ? T[Key] : T[Key] | undefined;
+};
