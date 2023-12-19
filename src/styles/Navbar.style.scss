@@ -1,0 +1,24 @@
+.navbar {
+	background-color: var(--background);
+	height: 3rem;
+	width: 100%;
+
+	display: flex;
+
+	&__left {
+		width: 50%;
+		padding: 0 1rem;
+
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	&__right {
+		width: 50%;
+		padding: 0 1rem;
+
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+}

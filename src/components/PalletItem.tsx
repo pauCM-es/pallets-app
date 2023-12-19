@@ -3,11 +3,11 @@
 import { Pallet } from '@prisma/client'
 import React, { use, useEffect } from 'react'
 
-import "@/styles/PalletItem.style.scss"
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { EmptyShelf } from '@/types/shelf.types'
+import "@/styles/PalletItem.style.scss"
 
 interface PalletItemProps {
   pallet: Pallet | EmptyShelf["pallets"][0]
