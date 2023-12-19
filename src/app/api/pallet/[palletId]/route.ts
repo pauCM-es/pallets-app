@@ -47,3 +47,23 @@ export const DELETE = async (
 		return new NextResponse(`Internal error: ${error}`, { status: 500 });
 	}
 };
+
+export const PATCH = async (
+	request: Request,
+	{ params }: { params: Params }
+) => {
+	try {
+		const { palletId } = params;
+		const dataToUpdate = await request.json();
+
+		const updatedPallet = await prisma?.pallet.update({
+			where: {
+				id: palletId,
+			},
+			data: dataToUpdate,
+		});
+		return NextResponse.json(updatedPallet);
+	} catch (error) {
+		return new NextResponse(`Internal error: ${error}`, { status: 500 });
+	}
+};

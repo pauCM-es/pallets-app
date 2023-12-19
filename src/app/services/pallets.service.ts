@@ -25,3 +25,16 @@ export const addNewPallet = (
 
 	return axios(config);
 };
+
+export const updatePallet = (
+	palletId: string,
+	data: Partial<Pallet>
+): AxiosPromise<Pallet> => {
+	const config: AxiosRequestConfig = {
+		url: `${process.env.BASE_URL}api/pallet/${palletId}`,
+		method: "PATCH",
+		data,
+	};
+
+	return axios(config);
+};
