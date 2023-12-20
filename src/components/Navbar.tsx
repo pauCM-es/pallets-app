@@ -1,9 +1,11 @@
 'use client'
 
 import React from 'react'
-import "@/styles/Navbar.style.scss"
-import Button from 'devextreme-react/button'
 import Link from 'next/link'
+import { IoSettings } from "react-icons/io5"
+
+import "@/styles/Navbar.style.scss"
+import Button from 'devextreme-react/cjs/button'
 
 const Navbar = () => {
   return (
@@ -22,6 +24,14 @@ const Navbar = () => {
       </section>
       <section className="navbar__right">
 
+        <Button
+          type='default'
+          height={ "2rem" }
+          style={ { "borderRadius": "3px" } }
+
+        >
+          <IoSettings />
+        </Button>
       </section>
     </nav>
   )
