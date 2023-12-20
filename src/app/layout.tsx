@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 // import '@/styles/root.scss'
 import 'devextreme/dist/css/dx.fluent.saas.dark.compact.css'
+import StoreProvider from './StoreProvider'
 // import '@/styles/dx.material.black-white-dark-scheme.css'
 
 
@@ -25,7 +26,12 @@ export default function RootLayout ({
       <body
         className={ `dx-viewport ${inter.className}` }
         data-theme="dark"
-      >{ children }</body>
+      >
+        <StoreProvider>
+          { children }
+        </StoreProvider>
+
+      </body>
     </html>
   )
 }

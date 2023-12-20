@@ -2,12 +2,22 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { IoSettings } from "react-icons/io5"
+import { MdArrowBackIosNew } from "react-icons/md"
 
 import "@/styles/Navbar.style.scss"
 import Button from 'devextreme-react/cjs/button'
+import { useAppDispatch, useAppSelector } from '@/libs/store'
+import { toggleDrawer } from '@/libs/features/global/globalSlice'
 
 const Navbar = () => {
+  const dispatch = useAppDispatch()
+
+  const handleToggleDrawer = () => {
+    dispatch(toggleDrawer())
+    console.log("toggle")
+
+  }
+
   return (
     <nav className='navbar'>
       <section className='navbar__left'>
@@ -28,9 +38,9 @@ const Navbar = () => {
           type='default'
           height={ "2rem" }
           style={ { "borderRadius": "3px" } }
-
+          onClick={ handleToggleDrawer }
         >
-          <IoSettings />
+          <MdArrowBackIosNew />
         </Button>
       </section>
     </nav>
