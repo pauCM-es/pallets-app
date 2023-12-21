@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '@/styles/SideDrawerContent.style.scss'
-import { NumberBox } from 'devextreme-react'
+import { Button, NumberBox } from 'devextreme-react'
 
 
 const SideDrawerContent = () => {
@@ -30,9 +30,14 @@ const Numpad = () => {
     <section className="numpad">
       <ul className="numpad__keys">
         {
-          keys.map((key, i) => <li
+          keys.map((key, i) => <Button
+            // className={ `${++i % 3 === 1 ? "clear-left" : ''}` }
             className={ `numpad__key ${++i % 3 === 1 ? "clear-left" : ''}` }
-          >{ key }</li>)
+            text={ key }
+            type='normal'
+            stylingMode='contained'
+
+          />)
         }
       </ul>
     </section>

@@ -4,7 +4,7 @@
 
 	height: 100%;
 	width: 20rem;
-	background-color: var(--background-contrast);
+	// background-color: var(--background-contrast);
 	position: relative;
 	top: 0;
 	display: flex;
@@ -40,14 +40,15 @@
 			float: left;
 			// margin: 0 0.25rem 0.25rem 0;
 			width: var(--key-width);
+			height: var(--key-width);
 			aspect-ratio: 1/1;
 			font-size: var(--font-l);
-			line-height: 4rem;
-			text-align: center;
-			background: #fff;
-			border: 1px solid #f9f9f9;
-			border-radius: 0.25rem;
-
+			// line-height: 4rem;
+			// text-align: center;
+			// background: #fff;
+			// color: var(--font-color-contrast);
+			// border: 1px solid #f9f9f9;
+			// border-radius: 0.25rem;
 			&.clear-left {
 				clear: left;
 			}

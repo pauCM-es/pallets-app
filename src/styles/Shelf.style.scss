@@ -1,6 +1,7 @@
 .shelf {
 	background-color: var(--background-contrast);
 	min-width: var(--pallet-width);
+	height: 90%;
 	border-radius: 0.25rem;
 
 	& .shelf__title {

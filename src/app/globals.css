@@ -12,10 +12,10 @@ body {
 }
 
 :root {
-  --nav-height: 3rem
+  --nav-height: 3rem;
  --pallet-width: 6rem;
 
- --color-primary: #31cdcd;
+ --color-primary: #5492f6;
  --color-secondary: #ffdc83;
  --color-danger: #ff5a78;
 
@@ -31,10 +31,10 @@ body {
   --font-color: #e1e1e1;
   --font-color-accent: #ffffff;
   --font-color-contrast: #575b69;
-  --background: #3a3d49;
-  --background-accent: #575b69;
+  --background: #12171d;
+  --background-accent: #787d8e;
   --background-contrast: #b3b5bf;
-  --background-contrast-2: #212229;
+  --background-contrast-2: #1e2832;
 
 }
 
