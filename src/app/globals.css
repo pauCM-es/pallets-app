@@ -5,7 +5,14 @@
   margin: 0;
 }
 
+body {
+  
+  height: 100vh;
+  width: 100vw;
+}
+
 :root {
+  --nav-height: 3rem
  --pallet-width: 6rem;
 
  --color-primary: #31cdcd;

@@ -7,7 +7,7 @@ interface GlobalState {
 }
 
 const initialState: GlobalState = {
-	isSideDrawerOpen: false,
+	isSideDrawerOpen: true,
 };
 
 export const globalSlice = createSlice({

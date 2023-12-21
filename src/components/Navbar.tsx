@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { MdArrowBackIosNew } from "react-icons/md"
+import { MdArrowForwardIos } from "react-icons/md"
 
 import "@/styles/Navbar.style.scss"
 import Button from 'devextreme-react/cjs/button'
@@ -10,6 +11,8 @@ import { useAppDispatch, useAppSelector } from '@/libs/store'
 import { toggleDrawer } from '@/libs/features/global/globalSlice'
 
 const Navbar = () => {
+  const { isSideDrawerOpen } = useAppSelector(state => state.global)
+
   const dispatch = useAppDispatch()
 
   const handleToggleDrawer = () => {
@@ -40,7 +43,9 @@ const Navbar = () => {
           style={ { "borderRadius": "3px" } }
           onClick={ handleToggleDrawer }
         >
-          <MdArrowBackIosNew />
+          <span className={ `${isSideDrawerOpen && "rotate"}` }>
+            <MdArrowBackIosNew />
+          </span>
         </Button>
       </section>
     </nav>

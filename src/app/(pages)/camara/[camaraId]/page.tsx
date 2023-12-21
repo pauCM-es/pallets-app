@@ -17,10 +17,12 @@ const CamaraIdPage = async ({
   const { palletsOnShelves } = res.data
 
   return (
-    <section>
-      <EmptySpace palletsOnShelves={ palletsOnShelves } />
-      <SideDrawer />
-    </section>
+    <>
+      <SideDrawer
+        children={ <EmptySpace palletsOnShelves={ palletsOnShelves } /> }
+
+      />
+    </>
   )
 }
 

@@ -1,12 +1,18 @@
 'use client'
 
-import { useAppSelector } from "@/libs/store"
-import { Drawer } from "devextreme-react"
 import { useEffect, useState } from "react"
+import { Drawer } from "devextreme-react"
+import { useAppSelector } from "@/libs/store"
+import SideDrawerContent from "./SideDrawerContent"
+
+import '@/styles/SideDrawer.style.scss'
 
 
-
-export const SideDrawer = () => {
+export const SideDrawer = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
   const { isSideDrawerOpen } = useAppSelector(state => state.global)
 
   useEffect(() => {
@@ -14,23 +20,24 @@ export const SideDrawer = () => {
 
   }, [isSideDrawerOpen])
 
+  const drawerContent = () => {
+    return (
+      <SideDrawerContent />
+    )
+  }
+
   return (
     <Drawer
       opened={ isSideDrawerOpen }
       openedStateMode={ "overlap" }
       position={ "right" }
       revealMode={ "slide" }
-      // component={  }
+      // component={ drawerContent }
+      render={ drawerContent }
       closeOnOutsideClick={ true }
-      height={ "100%" }
-      width={ "30rem" }
+      className="side-drawer"
     >
-      <section>
-        <div>
-          sdfsdf
-
-        </div>
-      </section>
+      { children }
     </Drawer >
   )
 }
