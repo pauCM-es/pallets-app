@@ -3,27 +3,32 @@
 import { useEffect, useState } from "react"
 import { Button, Drawer } from "devextreme-react"
 import { useAppDispatch, useAppSelector } from "@/libs/store"
-import SideDrawerContent from "./SideDrawerContent"
+import { NewPalletDrawer } from "./NewPalletDrawer"
 import { IoIosSearch, IoMdAdd, IoMdPricetag } from "react-icons/io"
 
+import { setDrawerState, setPalletsData, setSidebarOption } from "@/libs/features/global/globalSlice"
+import SearchPalletDrawer from "./SearchPalletDrawer"
 import '@/styles/SideDrawer.style.scss'
-import { setDrawerState, setSidebarOption } from "@/libs/features/global/globalSlice"
+import { PalletsOnShelf } from "@/types/prisma.types"
 
 const sidebarOptions = [
   {
     option: "new-pallet",
     tooltip: "Add new pallet",
     icon: <IoMdAdd />,
+    content: <NewPalletDrawer />
   },
   {
     option: "search",
     tooltip: "Search",
     icon: <IoIosSearch />,
+    content: <SearchPalletDrawer />
   },
   {
     option: "tag",
     tooltip: "Tag",
     icon: <IoMdPricetag />,
+    content: <NewPalletDrawer />
   }
 ] as const
 
@@ -31,17 +36,21 @@ export type SidebarOptions = typeof sidebarOptions[number]["option"]
 
 export const SideDrawer = ({
   children,
+  palletsData
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  palletsData: PalletsOnShelf[]
 }) => {
   const { isSideDrawerOpen, sidebarOptionActive } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
 
 
   useEffect(() => {
-    console.log(sidebarOptionActive)
+    dispatch(setPalletsData(palletsData))
+    console.log("palletData", palletsData)
 
-  }, [sidebarOptionActive])
+    return () => { dispatch(setPalletsData(undefined)) }
+  }, [])
 
   const drawerContent = () => {
     return (
@@ -49,6 +58,7 @@ export const SideDrawer = ({
         <nav className="sidebar">
           { sidebarOptions.map(option => (
             <Button
+              key={ option.option }
               className={ `sidebar__option ${sidebarOptionActive === option.option ? "sidebar__option--active" : ""}` }
               stylingMode="text"
               onClick={ (e) => {
@@ -62,7 +72,7 @@ export const SideDrawer = ({
             </Button>
           )) }
         </nav>
-        <SideDrawerContent />
+        { sidebarOptions.find(option => option.option === sidebarOptionActive)?.content || <NewPalletDrawer /> }
       </ aside>
     )
   }

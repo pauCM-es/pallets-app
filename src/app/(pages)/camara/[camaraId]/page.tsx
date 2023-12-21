@@ -20,7 +20,7 @@ const CamaraIdPage = async ({
     <>
       <SideDrawer
         children={ <EmptySpace palletsOnShelves={ palletsOnShelves } /> }
-
+        palletsData={ palletsOnShelves }
       />
     </>
   )

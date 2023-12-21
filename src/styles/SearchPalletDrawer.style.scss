@@ -1,0 +1,15 @@
+@use "./variables";
+
+.search-drawer {
+	&__content {
+		@include variables.panel-drawer-base;
+
+		& .search__lookup {
+			height: 3rem;
+			margin: 1rem 0;
+			width: var(--pad-width);
+			background: #fff;
+			// border: 1px solid #f9f9f9;
+		}
+	}
+}

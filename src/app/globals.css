@@ -15,6 +15,9 @@ body {
   --nav-height: 3rem;
  --pallet-width: 6rem;
 
+ --pad-width: 13rem;
+ --key-width: 4rem;
+
  --color-primary: #5492f6;
  --color-secondary: #ffdc83;
  --color-danger: #ff5a78;
