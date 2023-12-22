@@ -3,11 +3,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import globalReducer from "@/libs/features/global/globalSlice";
+import camaraReducer from "@/libs/features/camaras/camaraSlice";
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: {
 			global: globalReducer,
+			camara: camaraReducer,
 		},
 	});
 };

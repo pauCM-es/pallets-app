@@ -1,10 +1,11 @@
 import { Camara, Pallet, Shelf } from "@prisma/client";
 import axios, { AxiosPromise, AxiosRequestConfig } from "axios";
-import { PalletsOnShelf } from "@/types/prisma.types";
+import { GetCamaraResponse } from "@/types/prisma.types";
+import { ItemsOnShelf } from "@/types/camara.types";
 
 export const getCamaraById = (
 	camaraId: string
-): AxiosPromise<{ palletsOnShelves: PalletsOnShelf[] }> => {
+): AxiosPromise<GetCamaraResponse> => {
 	const config: AxiosRequestConfig = {
 		url: `${process.env.BASE_URL}api/camara/${camaraId}`,
 		method: "GET",
@@ -14,7 +15,7 @@ export const getCamaraById = (
 };
 
 export const updateAfterMove = (
-	newPositions: PalletsOnShelf[]
+	newPositions: ItemsOnShelf[]
 ): AxiosPromise<Shelf[]> => {
 	const config: AxiosRequestConfig = {
 		url: `${process.env.BASE_URL}api/pallet/movement`,

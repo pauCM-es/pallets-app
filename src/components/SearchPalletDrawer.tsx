@@ -8,19 +8,7 @@ import { Pallet } from '@prisma/client'
 
 
 const SearchPalletDrawer = () => {
-  const { palletsOnCurrentCamara } = useAppSelector(state => state.global)
-  const [listOfPallets, setListOfPallets] = useState<Pallet[]>([])
-
-  useEffect(() => {
-    let data: Pallet[] = []
-
-    palletsOnCurrentCamara?.forEach(shelf => {
-      if (shelf.pallets.length) {
-        data.push(...shelf.pallets)
-      }
-    })
-    setListOfPallets(data)
-  }, [])
+  const { palletsOnCurrentCamara } = useAppSelector(state => state.camara)
 
   const resultTemplate = (item: Pallet) => {
     return `${item.numberId} - ${item.product} ${item.boxBrand || "--"} ${item.pieces || "--"}`
@@ -31,7 +19,7 @@ const SearchPalletDrawer = () => {
 
       <Lookup
         className='search__lookup'
-        dataSource={ listOfPallets }
+        dataSource={ palletsOnCurrentCamara }
         valueExpr={ "numberId" }
         displayExpr={ "numberId" }
         itemTemplate={ resultTemplate }

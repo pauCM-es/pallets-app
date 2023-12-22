@@ -24,10 +24,10 @@ model Pallet {
   pieces   Int?
   boxBrand String?
 
-  position   Int[]
+  position   String[] @default([]) // [shelfId = x, height = y, index = z]
   camaraCode String
-  shipped    Boolean @default(false)
-  selected   Boolean @default(false)
+  shipped    Boolean  @default(false)
+  selected   Boolean  @default(false)
 
   tagsId String[] @default([]) @db.ObjectId
   tags   Tag[]    @relation(fields: [tagsId], references: [id])
@@ -56,22 +56,20 @@ model Product {
 }
 
 model Camara {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  code       String @unique
-  name       String
-  shelvesNum Int?
-  heights    Int?
-  perShelf   Int?
-  perHeight  Int?
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  code   String @unique
+  name   String
+  width  Int?
+  length Int?
 
   shelves Shelf[]
 }
 
 model Shelf {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
-
-  palletIds String[]
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  height Int?   @default(1)
+  length Int
 
   camaraId String
   camara   Camara @relation(fields: [camaraId], references: [code])

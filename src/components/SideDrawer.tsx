@@ -1,46 +1,52 @@
 'use client'
-
+//libs
 import { useEffect, useState } from "react"
 import { Button, Drawer } from "devextreme-react"
-import { useAppDispatch, useAppSelector } from "@/libs/store"
-import { NewPalletDrawer } from "./NewPalletDrawer"
 import { IoIosSearch, IoMdAdd, IoMdPricetag } from "react-icons/io"
-
-import { setDrawerState, setPalletsData, setSidebarOption } from "@/libs/features/global/globalSlice"
-import SearchPalletDrawer from "./SearchPalletDrawer"
+//components
+import SearchPalletDrawer from "@/components/SearchPalletDrawer"
+import { NewPalletDrawer } from "./NewPalletDrawer"
+//store
+import { useAppDispatch, useAppSelector } from "@/libs/store"
+import { setDrawerState, setSidebarOption } from "@/libs/features/global/globalSlice"
+import { setPalletsData } from "@/libs/features/camaras/camaraSlice"
+//types
+import { Camara, Pallet } from "@prisma/client"
+//styles
 import '@/styles/SideDrawer.style.scss'
-import { PalletsOnShelf } from "@/types/prisma.types"
 
-const sidebarOptions = [
+export const sidebarOptions = [
   {
     option: "new-pallet",
     tooltip: "Add new pallet",
     icon: <IoMdAdd />,
-    content: <NewPalletDrawer />
+    content: <NewPalletDrawer />,
   },
   {
     option: "search",
     tooltip: "Search",
     icon: <IoIosSearch />,
-    content: <SearchPalletDrawer />
+    content: <SearchPalletDrawer />,
   },
   {
     option: "tag",
     tooltip: "Tag",
     icon: <IoMdPricetag />,
-    content: <NewPalletDrawer />
-  }
+    content: <NewPalletDrawer />,
+  },
 ] as const
 
-export type SidebarOptions = typeof sidebarOptions[number]["option"]
+interface SideDrawerProps {
+  children: React.ReactNode,
+  palletsData: Pallet[],
+  camara: Camara
+}
 
 export const SideDrawer = ({
   children,
-  palletsData
-}: {
-  children: React.ReactNode,
-  palletsData: PalletsOnShelf[]
-}) => {
+  palletsData,
+  camara
+}: SideDrawerProps) => {
   const { isSideDrawerOpen, sidebarOptionActive } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
 
@@ -84,7 +90,6 @@ export const SideDrawer = ({
       position={ "right" }
       revealMode={ "slide" }
       render={ drawerContent }
-      // closeOnOutsideClick={ true }
       className="side-drawer"
       minSize={ 47 }
     >
