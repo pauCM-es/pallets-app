@@ -24,6 +24,11 @@ const pallets = [
 		pieces: 48,
 		boxBrand: "lidl",
 		camaraCode: "C01",
+		position: {
+			shelfId: "6585a56e3712a1f83f3cec5b",
+			height: 1,
+			index: 0,
+		},
 	},
 	{
 		numberId: "2",
@@ -32,6 +37,11 @@ const pallets = [
 		pieces: 16,
 		boxBrand: "gen",
 		camaraCode: "C01",
+		position: {
+			shelfId: "6585a56e3712a1f83f3cec5b",
+			height: 1,
+			index: 1,
+		},
 	},
 	{
 		numberId: "3",
@@ -40,6 +50,11 @@ const pallets = [
 		pieces: 20,
 		boxBrand: "eps",
 		camaraCode: "C01",
+		position: {
+			shelfId: "6585a56e3712a1f83f3cec5b",
+			height: 1,
+			index: 2,
+		},
 	},
 	{
 		numberId: "4",
@@ -48,6 +63,11 @@ const pallets = [
 		pieces: 36,
 		boxBrand: "ifco",
 		camaraCode: "C01",
+		position: {
+			shelfId: "6585a56e3712a1f83f3cec5b",
+			height: 1,
+			index: 3,
+		},
 	},
 ];
 
@@ -166,15 +186,19 @@ const seed = async (
 ) => {
 	try {
 		// const camarasCreated = await prisma.camara.createMany({ data: camaras });
-		const shelvesCreated = await prisma.shelf.createMany({ data: shelves });
+		// const shelvesCreated = await prisma.shelf.createMany({ data: shelves });
 
 		// const usersCreated = await prisma.user.createMany({
 		// 	data: usersSeeds,
 		// });
-
-		// const palletsCreated = await prisma.pallet.createMany({
-		// 	data: pallets,
-		// });
+		const palletsDeleted = await prisma.pallet.deleteMany({
+			where: {
+				camaraCode: "C01",
+			},
+		});
+		const palletsCreated = await prisma.pallet.createMany({
+			data: pallets,
+		});
 		// const productsCreated = await prisma.product.createMany({
 		// 	data: products,
 		// });
@@ -182,9 +206,10 @@ const seed = async (
 		// 	data: boxBrands,
 		// });
 		console.log(
-			// palletsCreated
+			palletsCreated,
+			palletsDeleted
 			// camarasCreated,
-			shelvesCreated
+			// shelvesCreated
 		);
 	} catch (error) {
 		console.log(error);

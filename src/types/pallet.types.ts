@@ -6,10 +6,4 @@ export type AddPallet = HalfPartial<
 	"numberId" | "product" | "position" | "camaraCode"
 >;
 
-export type PositionOnShelf = [string, string, string];
-
-export type PalletItem = ReplaceObjPropType<
-	Pallet,
-	"position",
-	PositionOnShelf
->;
+export type ItemPlaceholder = { numberId: "empty" };

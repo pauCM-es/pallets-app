@@ -16,6 +16,12 @@ model User {
   updatedAt DateTime? @updatedAt
 }
 
+type position {
+  shelfId String
+  height  Int
+  index   Int
+}
+
 model Pallet {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   numberId String  @unique
@@ -24,10 +30,11 @@ model Pallet {
   pieces   Int?
   boxBrand String?
 
-  position   String[] @default([]) // [shelfId = x, height = y, index = z]
+  position position?
+
   camaraCode String
-  shipped    Boolean  @default(false)
-  selected   Boolean  @default(false)
+  shipped    Boolean @default(false)
+  selected   Boolean @default(false)
 
   tagsId String[] @default([]) @db.ObjectId
   tags   Tag[]    @relation(fields: [tagsId], references: [id])

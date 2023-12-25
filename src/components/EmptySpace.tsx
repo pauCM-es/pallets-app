@@ -1,22 +1,30 @@
 "use client"
-
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import Shelf from './Shelf'
-import '@/styles/EmptySpace.style.scss'
-import { DndContext, DragEndEvent, DragMoveEvent, DragOverlay, DragStartEvent, DroppableContainer, UniqueIdentifier, closestCenter, closestCorners } from '@dnd-kit/core'
+//libs
+import React from 'react'
+import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable'
+//components
+import Shelf from './Shelf'
 import PalletItem from './PalletItem'
-import { Pallet } from '@prisma/client'
-import { EmptyShelf } from '@/types/shelf.types'
-import { updateAfterMove } from '@/app/services/camara.service'
+//utils
 import { useMovePalet } from '@/hooks/camaras/useMovePallet'
-import { ItemsOnShelf } from '@/types/camara.types'
+//types
+import { ItemsByShelf } from '@/types/camara.types'
+//styles
+import '@/styles/EmptySpace.style.scss'
 
-interface EmptySpaceProps { itemsGroupedByShelf: ItemsOnShelf[] }
+interface EmptySpaceProps { itemsGroupedByShelf: ItemsByShelf }
 
 const EmptySpace = ({ itemsGroupedByShelf }: EmptySpaceProps) => {
 
-  const { onDragStart, onDragMove, onDragEnd, positionRef, activePallet } = useMovePalet(itemsGroupedByShelf)
+  const {
+    onDragStart,
+    onDragMove,
+    onDragEnd,
+    initialPositionsRef,
+    activePallet,
+    currentPositions
+  } = useMovePalet(itemsGroupedByShelf)
 
 
 
@@ -29,32 +37,37 @@ const EmptySpace = ({ itemsGroupedByShelf }: EmptySpaceProps) => {
         collisionDetection={ closestCorners }
       >
         {
-          positionRef?.current.map((shelf: Pallet) => (
+          Object.keys(currentPositions).map((shelf: string) => (
             <Shelf
-              id={ shelf.shelfId }
-              key={ shelf.shelfId }
-              title={ shelf.shelfId }
+              id={ shelf }
+              key={ shelf }
+              title={ shelf }
             >
               <SortableContext
-                items={ shelf.pallets.length > 0 ? shelf.pallets.map(pallet => pallet.numberId) : [`empty-${shelf.shelfId}`] }
-                id={ shelf.shelfId }
+                items={
+                  currentPositions[shelf].length > 0 ? currentPositions[shelf]
+                    .map(pallet => pallet.numberId) : [`empty-${shelf}`]
+                }
+                id={ shelf }
                 strategy={ verticalListSortingStrategy }
               >
 
-                { shelf && !isShelfEmpty(shelf)
-                  ? shelf.pallets?.map((pallet) => pallet &&
+                { currentPositions[shelf].length
+                  ? currentPositions[shelf]?.map((item) => item &&
                     <PalletItem
-                      key={ pallet.numberId }
-                      id={ pallet.numberId }
-                      pallet={ pallet }
-                      isActive={ activePallet?.pallet.numberId === pallet.numberId }
+                      key={ item.id }
+                      id={ item.numberId }
+                      pallet={ item }
+                      isActive={ activePallet?.numberId === item.numberId }
                     />
                   )
-                  : <PalletItem
-                    key={ `empty-${shelf.shelfId}` }
-                    id={ `empty-${shelf.shelfId}` }
+                  :
+                  <PalletItem
+                    key={ `empty-${shelf}` }
+                    id={ `empty-${shelf}` }
                     pallet={ { numberId: "empty" } }
                   />
+                  // <></>
                 }
               </SortableContext>
             </Shelf>
@@ -63,7 +76,7 @@ const EmptySpace = ({ itemsGroupedByShelf }: EmptySpaceProps) => {
         }
         <DragOverlay>
           { (activePallet) ? (
-            <PalletItem pallet={ activePallet.pallet } id={ activePallet.pallet.numberId } />
+            <PalletItem pallet={ activePallet } id={ activePallet.numberId } />
           ) : null
 
           }
