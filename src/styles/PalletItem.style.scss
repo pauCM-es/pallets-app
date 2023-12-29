@@ -1,21 +1,22 @@
-@import "variables.scss";
-
 .pallet {
-	border: 1px solid rgb(46, 47, 52);
-	width: var(--pallet-width);
-	aspect-ratio: 3/2;
-	background-color: whitesmoke;
+	border: 1px solid var(--background-accent);
+	background-color: var(--background);
 	border-radius: 0.25rem;
-	margin: 0.5rem 0.25rem;
+	color: var(--font-color);
 	cursor: pointer;
+	margin: 0.5rem 0.25rem;
+	width: var(--pallet-width);
 
 	&:hover {
-		background-color: rgb(170, 209, 244);
+		border: 1px solid var(--background-accent);
+		background-color: var(--background);
+		color: var(--font-color);
 		opacity: 0.4;
 	}
 
 	&--is-sorting {
-		background-color: rgb(118, 255, 255);
+		background-color: var(--background-accent);
+		color: var(--font-color-accent);
 	}
 
 	&--empty {
@@ -24,5 +25,13 @@
 		border: none;
 		color: transparent;
 		user-select: none;
+	}
+
+	&.eu-size {
+		aspect-ratio: 3/2;
+	}
+
+	&.ind-size {
+		aspect-ratio: 6/5;
 	}
 }

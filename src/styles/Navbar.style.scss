@@ -1,7 +1,8 @@
 .navbar {
-	background-color: var(--background);
-	height: 3rem;
+	background-color: var(--background-contrast-2);
+	height: var(--nav-height);
 	width: 100%;
+	border-bottom: 1px solid var(--background-accent);
 
 	display: flex;
 
@@ -20,5 +21,9 @@
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
+
+		& .rotate {
+			transform: rotate(180deg);
+		}
 	}
 }

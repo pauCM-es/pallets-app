@@ -37,7 +37,7 @@ const PalletItem = ({ pallet, id, isActive }: PalletItemProps) => {
     isTypePallet(pallet)
       ? <section
         id={ `pallet-${pallet.id}` }
-        className={ `pallet pallet${isActive ? "--is-sorting" : ""}` }
+        className={ `pallet pallet${isActive ? "--is-sorting" : ""} eu-size` }
         ref={ setNodeRef }
         { ...attributes }
         { ...listeners }

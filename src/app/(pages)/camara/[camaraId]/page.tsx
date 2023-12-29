@@ -1,7 +1,6 @@
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
-import { PalletsOnShelf } from "@/types/prisma.types"
-import { EmptyShelf } from "@/types/shelf.types"
+import { SideDrawer } from "@/components/SideDrawer"
 
 
 interface Params {
@@ -18,10 +17,12 @@ const CamaraIdPage = async ({
   const { palletsOnShelves } = res.data
 
   return (
-    <section>
-      <EmptySpace palletsOnShelves={ palletsOnShelves } />
-
-    </section>
+    <>
+      <SideDrawer
+        children={ <EmptySpace palletsOnShelves={ palletsOnShelves } /> }
+        palletsData={ palletsOnShelves }
+      />
+    </>
   )
 }
 

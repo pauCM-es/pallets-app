@@ -1,0 +1,13 @@
+@use "./variables";
+
+.new-pallet-drawer__content {
+	@include variables.panel-drawer-base;
+
+	& .content__id-input {
+		height: 3rem;
+		margin: 1rem 0;
+		width: var(--pad-width);
+		background: #fff;
+		border: 1px solid #f9f9f9;
+	}
+}

@@ -1,0 +1,45 @@
+.side-drawer {
+	width: 100vw;
+	height: calc(100vh - var(--nav-height));
+
+	&__panel {
+		background-color: var(--background);
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+
+	& .sidebar {
+		width: 3rem;
+		background-color: var(--background-contrast-2);
+		border-right: 1px solid var(--background-accent);
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+
+		// box-shadow: -4px 0px 1rem -3px rgba(0, 0, 0, 0.75);
+
+		&__option {
+			width: 3rem;
+			height: 3rem;
+			aspect-ratio: 1/1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: var(--font-xl);
+
+			&--active {
+				opacity: 0.7;
+				background-color: var(--color-primary);
+
+				&:hover {
+					opacity: 0.8;
+				}
+			}
+		}
+	}
+
+	& .dx-overlay-content {
+		height: 100%;
+	}
+}
