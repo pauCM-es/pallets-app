@@ -1,16 +1,22 @@
 import { PalletItem } from "@/types/camara.types";
+import { Position } from "@/types/prisma.types";
+import { Pallet } from "@prisma/client";
 
-export const orderItemsByIndexPosition = (itemsList: PalletItem[]) => {
-	return itemsList.sort((a, b) => a.position?.index - b.position?.index);
+export const orderItemsByIndexPosition = (itemsList: Pallet[]) => {
+	const excludeItemsNullPos = itemsList.filter(
+		(item) => item.position
+	) as PalletItem[];
+	return excludeItemsNullPos.sort(
+		(a, b) => a.position?.index - b.position?.index
+	);
 };
 
 export const updatePositionOnShelf = (shelf: PalletItem[]) => {
 	return shelf?.map((item, newIndex) => ({
 		...item,
 		position: {
-			shelfId: item.position.shelfId,
-			heigth: item.position.height,
-			index: `${newIndex}`,
+			...item.position,
+			index: newIndex,
 		},
 	}));
 };

@@ -22,9 +22,9 @@ const CamaraIdPage = async ({
   const itemsGroupedByShelf: ItemsByShelf = {}
   shelves.map(shelf => {
     const orderedItemsOnShelf = orderItemsByIndexPosition(
-      palletsOnCamara.filter((pallet) => pallet.position?.shelfId === shelf.name)
+      palletsOnCamara.filter((pallet) => (pallet.position?.shelfId === shelf.name))
     )
-    itemsGroupedByShelf[shelf.name] = orderedItemsOnShelf as PalletItem[]
+    itemsGroupedByShelf[shelf.name] = orderedItemsOnShelf
   })
 
   return (

@@ -25,43 +25,49 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 		toShelf: undefined,
 	});
 
-	useEffect(() => {
-		// if (!movement.fromShelf || !movement.toShelf) return;
-		// const shelvesInvolved = positions
-		// 	.filter(
-		// 		(shelf) =>
-		// 			shelf.shelfId === movement.fromShelf ||
-		// 			shelf.shelfId === movement.toShelf
-		// 	)
-		// 	.map((shelf) => {
-		// 		if (
-		// 			shelf.pallets.length === 1 &&
-		// 			shelf.pallets[0].numberId === "empty"
-		// 		) {
-		// 			const mapShelf = { ...shelf, pallets: [] };
-		// 			console.log(mapShelf);
-		// 			return mapShelf as PalletsOnShelf;
-		// 		} else {
-		// 			return shelf;
-		// 		}
-		// 	});
-		// console.log(shelvesInvolved);
-		// updateAfterMove(shelvesInvolved as PalletsOnShelf[])
-		// 	.then((res) => {
-		// 		console.log(res);
-		// 	})
-		// 	.catch((error) => {
-		// 		//TODO: undo movement.
-		// 		console.log(error);
-		// 	});
-		// setMovement({ fromShelf: undefined, toShelf: undefined });
-	}, [movement]);
+	// useEffect(() => {
+	// if (!movement.fromShelf || !movement.toShelf) return;
+	// const shelvesInvolved = positions
+	// 	.filter(
+	// 		(shelf) =>
+	// 			shelf.shelfId === movement.fromShelf ||
+	// 			shelf.shelfId === movement.toShelf
+	// 	)
+	// 	.map((shelf) => {
+	// 		if (
+	// 			shelf.pallets.length === 1 &&
+	// 			shelf.pallets[0].numberId === "empty"
+	// 		) {
+	// 			const mapShelf = { ...shelf, pallets: [] };
+	//
+	// 			return mapShelf as PalletsOnShelf;
+	// 		} else {
+	// 			return shelf;
+	// 		}
+	// 	});
+	//
+	// updateAfterMove(shelvesInvolved as PalletsOnShelf[])
+	// 	.then((res) => {
+	//
+	// 	})
+	// 	.catch((error) => {
+	// 		//TODO: undo movement.
+	//
+	// 	});
+	// setMovement({ fromShelf: undefined, toShelf: undefined });
+	// }, [movement]);
+
+	// useEffect(() => {
+	// 	if (!activePallet) return;
+
+	// }, [activePallet, currentPositions]);
 
 	const onDragStart = (evt: DragStartEvent) => {
 		const id = evt.active.id;
 		const shelf: string = evt.active.data.current?.sortable.containerId;
 		const index = evt.active.data.current?.sortable.index;
-		const activePalletData = initialPositionsRef.current[shelf]?.[index];
+		const activePalletData = initialPositionsRef.current[shelf][index];
+		console.log("activePalletData :", activePalletData);
 
 		if (activePalletData?.numberId !== "empty") {
 			activePalletData && setActivePallet(activePalletData);
@@ -72,16 +78,19 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragMove = (evt: DragMoveEvent) => {
-		if (!activePallet) return;
+		if (!activePallet || !activePallet?.position) return;
 
 		const { active, over } = evt;
 		let activePalletId = active?.data.current?.sortable?.index;
+
 		let prevShelfId = activePallet.position.shelfId;
 		let newShelfId: string = over?.data.current?.sortable?.containerId;
 		let newPalletIndex: number = over?.data.current?.sortable?.index;
 
 		if (prevShelfId !== newShelfId) {
 			let prevPositions = { ...currentPositions };
+			console.log("prevShelfId :", activePallet.position);
+			console.log("prevPositions :", prevPositions);
 			//remove pallet from prev shelf
 
 			prevPositions[prevShelfId].splice(activePallet.position.index, 1);
@@ -110,11 +119,11 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 				if (oldState) {
 					return {
 						...oldState,
-						position: [
-							newShelfId,
-							oldState.position.height,
-							`${newPalletIndex}`,
-						],
+						position: {
+							...oldState.position,
+							shelfId: newShelfId,
+							index: newPalletIndex,
+						},
 					};
 				} else return null;
 			});
@@ -127,7 +136,6 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 				newPalletIndex > currentPositions[newShelfId].length - 1
 			)
 				return;
-			console.log("same shelf");
 
 			let prevPositions = { ...currentPositions };
 
@@ -141,21 +149,14 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 					prevPositions[activePallet.position.shelfId]
 				);
 
-			console.log(
-				prevPositions[activePallet.position.shelfId].map(
-					(item) => item.numberId
-				)
-			);
-
 			setActivePallet((oldState) => {
 				if (oldState) {
 					return {
 						...oldState,
-						position: [
-							oldState.position.shelfId,
-							oldState.position.height,
-							`${newPalletIndex}`,
-						],
+						position: {
+							...oldState.position,
+							index: newPalletIndex,
+						},
 					};
 				} else return null;
 			});
@@ -164,7 +165,6 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragEnd = (evt: DragEndEvent) => {
-		console.log(evt, currentPositions, activePallet);
 		setActivePallet(null);
 		initialPositionsRef.current = currentPositions;
 		setMovement((oldState) => {

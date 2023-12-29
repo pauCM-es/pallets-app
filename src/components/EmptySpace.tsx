@@ -1,6 +1,6 @@
 "use client"
 //libs
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core'
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable'
 //components
@@ -25,6 +25,16 @@ const EmptySpace = ({ itemsGroupedByShelf }: EmptySpaceProps) => {
     activePallet,
     currentPositions
   } = useMovePalet(itemsGroupedByShelf)
+
+
+  useEffect(() => {
+    console.log(itemsGroupedByShelf)
+
+
+    return () => {
+
+    }
+  }, [])
 
 
 
