@@ -1,17 +1,26 @@
-import { Camara, Pallet } from "@prisma/client";
+import { Camara, Pallet, Shelf } from "@prisma/client";
+import axios, { AxiosPromise, AxiosRequestConfig } from "axios";
+import { PalletsOnShelf } from "@/types/prisma.types";
 
-export const getCamaraById = async (
+export const getCamaraById = (
 	camaraId: string
-): Promise<{ camara: Camara; pallets: Pallet[] }> => {
-	console.log("param: ", camaraId);
+): AxiosPromise<{ palletsOnShelves: PalletsOnShelf[] }> => {
+	const config: AxiosRequestConfig = {
+		url: `${process.env.BASE_URL}api/camara/${camaraId}`,
+		method: "GET",
+	};
 
-	const res = await fetch(`${process.env.BASE_URL}api/camara/${camaraId}`);
+	return axios(config);
+};
 
-	if (!res.ok) {
-		// This will activate the closest `error.js` Error Boundary
-		throw new Error("Failed to fetch data");
-	}
-	console.log(res);
+export const updateAfterMove = (
+	newPositions: PalletsOnShelf[]
+): AxiosPromise<Shelf[]> => {
+	const config: AxiosRequestConfig = {
+		url: `${process.env.BASE_URL}api/pallet/movement`,
+		method: "PATCH",
+		data: newPositions,
+	};
 
-	return res.json();
+	return axios(config);
 };

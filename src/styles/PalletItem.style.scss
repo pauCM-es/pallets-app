@@ -1,0 +1,28 @@
+@import "variables.scss";
+
+.pallet {
+	border: 1px solid rgb(46, 47, 52);
+	width: var(--pallet-width);
+	aspect-ratio: 3/2;
+	background-color: whitesmoke;
+	border-radius: 0.25rem;
+	margin: 0.5rem 0.25rem;
+	cursor: pointer;
+
+	&:hover {
+		background-color: rgb(170, 209, 244);
+		opacity: 0.4;
+	}
+
+	&--is-sorting {
+		background-color: rgb(118, 255, 255);
+	}
+
+	&--empty {
+		background-color: transparent;
+		pointer-events: none;
+		border: none;
+		color: transparent;
+		user-select: none;
+	}
+}

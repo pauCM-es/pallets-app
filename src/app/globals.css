@@ -6,6 +6,30 @@
 }
 
 :root {
- --color-primary: #4ed8fa
+ --color-primary: #31cdcd;
+ --color-secondary: #ffdc83;
+ --color-danger: #ff5a78;
+
+ --font-xs: 0.25rem;
+ --font-s: 0.5rem;
+ --font-m: 1rem;
+ --font-l: 1.25rem;
+ --font-xl: 1.5rem;
+}
+
+[data-theme="dark"] {
+  --font-color: #e1e1e1;
+  --font-color-accent: #ffffff;
+  --background: #3c4360;
+  --background-accent: #5a69a5;
+
+}
+
+[data-theme="light"] {
+  --font-color: #202020;
+  --font-color-accent: #4b4b4b;
+  --background: #f3f3f3;
+  --background-accent: #c3c3c3;
+
 }
 

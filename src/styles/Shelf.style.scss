@@ -1,0 +1,7 @@
+@import "variables.scss";
+
+.shelf {
+	background-color: grey;
+	border: 1px solid black;
+	min-width: var(--pallet-width);
+}
