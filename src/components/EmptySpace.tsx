@@ -65,7 +65,7 @@ const EmptySpace = ({ itemsGroupedByShelf }: EmptySpaceProps) => {
                 { currentPositions[shelf].length
                   ? currentPositions[shelf]?.map((item) => item &&
                     <PalletItem
-                      key={ item.id }
+                      key={ `${shelf}-${item.numberId}` }
                       id={ item.numberId }
                       pallet={ item }
                       isActive={ activePallet?.numberId === item.numberId }

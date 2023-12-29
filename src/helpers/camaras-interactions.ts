@@ -1,4 +1,5 @@
 import { PalletItem } from "@/types/camara.types";
+import { ItemPlaceholder } from "@/types/pallet.types";
 import { Position } from "@/types/prisma.types";
 import { Pallet } from "@prisma/client";
 
@@ -19,4 +20,14 @@ export const updatePositionOnShelf = (shelf: PalletItem[]) => {
 			index: newIndex,
 		},
 	}));
+};
+
+export const addPlaceholdersOnShelf = (
+	shelf: PalletItem[]
+): [ItemPlaceholder] | PalletItem[] => {
+	if (shelf.length) {
+		return [{ numberId: "empty" }];
+	} else {
+		return shelf;
+	}
 };

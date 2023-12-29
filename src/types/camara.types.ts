@@ -8,6 +8,7 @@ import {
 } from "./utils.types";
 import { Pallet } from "@prisma/client";
 import { Position } from "./prisma.types";
+import { ItemPlaceholder } from "./pallet.types";
 
 export interface ItemsByShelf {
 	[key: string]: PalletItem[];
@@ -23,3 +24,9 @@ type SidebarOption = ObjInArray<typeof sidebarOptions>;
 type SidebarGenericOption = MakeGenericObj<
 	MakeMutable<(typeof sidebarOptions)[0]>
 >;
+
+export const hasShelfItems = (
+	shelf: PalletItem[] | [ItemPlaceholder]
+): shelf is PalletItem[] => {
+	return (shelf as PalletItem[])[0].numberId !== "empty";
+};

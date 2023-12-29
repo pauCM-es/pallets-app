@@ -1,15 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DragEndEvent, DragMoveEvent, DragStartEvent } from "@dnd-kit/core";
-import {
-	SortableContext,
-	arrayMove,
-	verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Pallet } from "@prisma/client";
-import { EmptyShelf } from "@/types/shelf.types";
-// import { updateAfterMove } from "@/app/services/camara.service";
+import { arrayMove } from "@dnd-kit/sortable";
 import { ItemsByShelf, PalletItem } from "@/types/camara.types";
 import { updatePositionOnShelf } from "@/helpers/camaras-interactions";
+import { updateAfterMove } from "@/app/services/camara.service";
 import "@/styles/EmptySpace.style.scss";
 
 export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
@@ -25,49 +19,30 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 		toShelf: undefined,
 	});
 
-	// useEffect(() => {
-	// if (!movement.fromShelf || !movement.toShelf) return;
-	// const shelvesInvolved = positions
-	// 	.filter(
-	// 		(shelf) =>
-	// 			shelf.shelfId === movement.fromShelf ||
-	// 			shelf.shelfId === movement.toShelf
-	// 	)
-	// 	.map((shelf) => {
-	// 		if (
-	// 			shelf.pallets.length === 1 &&
-	// 			shelf.pallets[0].numberId === "empty"
-	// 		) {
-	// 			const mapShelf = { ...shelf, pallets: [] };
-	//
-	// 			return mapShelf as PalletsOnShelf;
-	// 		} else {
-	// 			return shelf;
-	// 		}
-	// 	});
-	//
-	// updateAfterMove(shelvesInvolved as PalletsOnShelf[])
-	// 	.then((res) => {
-	//
-	// 	})
-	// 	.catch((error) => {
-	// 		//TODO: undo movement.
-	//
-	// 	});
-	// setMovement({ fromShelf: undefined, toShelf: undefined });
-	// }, [movement]);
+	useEffect(() => {
+		if (!movement.fromShelf || !movement.toShelf) return;
+		const shelvesInvolved: ItemsByShelf = {
+			[movement.fromShelf]: currentPositions[movement.fromShelf],
+			[movement.toShelf]: currentPositions[movement.toShelf],
+		};
 
-	// useEffect(() => {
-	// 	if (!activePallet) return;
-
-	// }, [activePallet, currentPositions]);
+		updateAfterMove(shelvesInvolved)
+			.then((res) => {
+				initialPositionsRef.current = currentPositions;
+				console.log(res.data);
+			})
+			.catch((error) => {
+				setCurrentPositions(initialPositionsRef.current);
+				console.log("error :", error);
+			});
+		setMovement({ fromShelf: undefined, toShelf: undefined });
+	}, [movement]);
 
 	const onDragStart = (evt: DragStartEvent) => {
 		const id = evt.active.id;
 		const shelf: string = evt.active.data.current?.sortable.containerId;
 		const index = evt.active.data.current?.sortable.index;
 		const activePalletData = initialPositionsRef.current[shelf][index];
-		console.log("activePalletData :", activePalletData);
 
 		if (activePalletData?.numberId !== "empty") {
 			activePalletData && setActivePallet(activePalletData);
@@ -87,12 +62,11 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 		let newShelfId: string = over?.data.current?.sortable?.containerId;
 		let newPalletIndex: number = over?.data.current?.sortable?.index;
 
+		//move involve diferent shelves
 		if (prevShelfId !== newShelfId) {
 			let prevPositions = { ...currentPositions };
-			console.log("prevShelfId :", activePallet.position);
-			console.log("prevPositions :", prevPositions);
-			//remove pallet from prev shelf
 
+			//remove pallet from prev shelf
 			prevPositions[prevShelfId].splice(activePallet.position.index, 1);
 			prevPositions[prevShelfId] = updatePositionOnShelf(
 				prevPositions[prevShelfId]
@@ -102,8 +76,16 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 			// 	prevPositions[newShelfId] = [activePallet];
 			// } else {
 
+			const palletUpdated = {
+				...activePallet,
+				position: {
+					...activePallet.position,
+					shelfId: newShelfId,
+					index: newPalletIndex,
+				},
+			};
 			//insert pallet on newIndex into new shelf
-			prevPositions[newShelfId]?.splice(newPalletIndex, 0, activePallet);
+			prevPositions[newShelfId]?.splice(newPalletIndex, 0, palletUpdated);
 			prevPositions[newShelfId] = updatePositionOnShelf(
 				prevPositions[newShelfId]
 			);
@@ -115,18 +97,9 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 			// 	prevPositions[prevShelfId] = [{ numberId: "empty" }];
 			// }
 
-			setActivePallet((oldState) => {
-				if (oldState) {
-					return {
-						...oldState,
-						position: {
-							...oldState.position,
-							shelfId: newShelfId,
-							index: newPalletIndex,
-						},
-					};
-				} else return null;
-			});
+			// update position on pallet
+			setActivePallet(palletUpdated);
+
 			setCurrentPositions(prevPositions);
 		} else {
 			//doesn't considered empty shelf bc if you move something into the same shelf, it means it
@@ -165,8 +138,9 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragEnd = (evt: DragEndEvent) => {
+		console.log("DifShelves :", currentPositions);
+
 		setActivePallet(null);
-		initialPositionsRef.current = currentPositions;
 		setMovement((oldState) => {
 			return { ...oldState, toShelf: activePallet?.position.shelfId };
 		});
