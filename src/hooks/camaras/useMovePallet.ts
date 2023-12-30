@@ -35,6 +35,7 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 				setCurrentPositions(initialPositionsRef.current);
 				console.log("error :", error);
 			});
+		console.log("shelvesInvolved :", shelvesInvolved);
 		setMovement({ fromShelf: undefined, toShelf: undefined });
 	}, [movement]);
 
@@ -66,15 +67,21 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 		if (prevShelfId !== newShelfId) {
 			let prevPositions = { ...currentPositions };
 
-			//remove pallet from prev shelf
+			//remove pallet from prev shelf and update it if there's still items on it.
 			prevPositions[prevShelfId].splice(activePallet.position.index, 1);
-			prevPositions[prevShelfId] = updatePositionOnShelf(
+			if (prevPositions[prevShelfId].length) {
+				prevPositions[prevShelfId] = updatePositionOnShelf(
+					prevPositions[prevShelfId]
+				);
+				console.log(
+					"updating prev shelf to:",
+					prevPositions[prevShelfId]
+				);
+			}
+			console.log(
+				"NO update prev shelf. to:",
 				prevPositions[prevShelfId]
 			);
-
-			// if (!prevPositions[newShelfId]?.length) {
-			// 	prevPositions[newShelfId] = [activePallet];
-			// } else {
 
 			const palletUpdated = {
 				...activePallet,
@@ -84,13 +91,19 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 					index: newPalletIndex,
 				},
 			};
-			//insert pallet on newIndex into new shelf
-			prevPositions[newShelfId]?.splice(newPalletIndex, 0, palletUpdated);
-			prevPositions[newShelfId] = updatePositionOnShelf(
-				prevPositions[newShelfId]
-			);
-
-			// }
+			if (!prevPositions[newShelfId]?.length) {
+				prevPositions[newShelfId] = [palletUpdated];
+			} else {
+				//insert pallet on newIndex into new shelf
+				prevPositions[newShelfId]?.splice(
+					newPalletIndex,
+					0,
+					palletUpdated
+				);
+				prevPositions[newShelfId] = updatePositionOnShelf(
+					prevPositions[newShelfId]
+				);
+			}
 
 			// if prev shelf gets empry, insert placeholder
 			// if (prevPositions[prevShelfId]?.length === 0) {
@@ -138,7 +151,7 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragEnd = (evt: DragEndEvent) => {
-		console.log("DifShelves :", currentPositions);
+		console.log("Positions on END :", currentPositions);
 
 		setActivePallet(null);
 		setMovement((oldState) => {

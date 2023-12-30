@@ -12,10 +12,14 @@ export const PATCH = async (request: Request) => {
 			[key: string]: Pallet[];
 		} = {};
 
+		// store the update action for each item to call then later on a transaction at the same time
+		const transactions: any[] = [];
+
 		for (const [shelfName, palletsList] of Object.entries(body)) {
 			updatedShelves[shelfName] = [];
+
 			palletsList.forEach(async (pallet) => {
-				const palletUpdated = await prisma.pallet.update({
+				const updateAction = prisma.pallet.update({
 					where: {
 						id: pallet.id,
 					},
@@ -23,22 +27,21 @@ export const PATCH = async (request: Request) => {
 						position: { ...pallet.position },
 					},
 				});
-				updatedShelves[shelfName] = [
-					...updatedShelves[shelfName],
-					palletUpdated,
-				];
-				console.log(
-					"palletUpdated :",
-					palletUpdated.numberId,
-					palletUpdated.position
-				);
+				transactions.push(updateAction);
 			});
-			console.log("shelf :", updatedShelves);
 		}
 
-		console.log("updatedShelves :", updatedShelves);
+		const allPalletsUpdated = await prisma.$transaction(transactions);
 
-		return NextResponse.json({ ...updatedShelves });
+		// to return the same object. Pallets ordered by shelf
+		allPalletsUpdated.forEach((pallet) => {
+			updatedShelves[pallet.position.shelfId] = [
+				...updatedShelves[pallet.position.shelfId],
+				pallet,
+			];
+		});
+
+		return NextResponse.json(updatedShelves);
 	} catch (error) {
 		return new NextResponse(`Internal error: ${error}`, { status: 500 });
 	}
