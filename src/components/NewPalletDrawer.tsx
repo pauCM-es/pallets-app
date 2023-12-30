@@ -12,22 +12,27 @@ export type SelectedOptions = {
   boxBrandCode: undefined | string
 }
 
+const initialStateOptions = {
+  productCode: undefined,
+  caliber: undefined,
+  size: undefined,
+  boxBrandCode: undefined
+}
 
 export const NewPalletDrawer = () => {
 
   const [numberId, setNumberId] = useState<number | undefined>(undefined)
-  const [optionsSelected, setOptionsSelected] = useState<SelectedOptions>({
-    productCode: undefined,
-    caliber: undefined,
-    size: undefined,
-    boxBrandCode: undefined
-  })
+  const [optionsSelected, setOptionsSelected] = useState<SelectedOptions>(initialStateOptions)
   const { products, boxBrands } = useAppSelector(state => state.camara)
 
   useEffect(() => {
-    console.log(optionsSelected)
-
-  }, [optionsSelected])
+    setOptionsSelected(prev => {
+      return {
+        ...prev,
+        caliber: undefined
+      }
+    })
+  }, [optionsSelected.productCode])
 
   return (
     <div className='new-pallet-drawer__content'>
@@ -51,7 +56,9 @@ export const NewPalletDrawer = () => {
           type='danger'
           width={ "6rem" }
           height={ "2rem" }
-          focusStateEnabled={ false } />
+          focusStateEnabled={ false }
+          onClick={ () => setOptionsSelected(initialStateOptions) }
+        />
       </div>
       <section className="content__properties-list">
         <OptionsList
@@ -61,6 +68,18 @@ export const NewPalletDrawer = () => {
           optionSelected={ optionsSelected.productCode }
           optionsList={ products.map(prod => prod.code) }
         />
+        {
+          optionsSelected.productCode && (
+            <OptionsList
+              title="Caliber:"
+              property="caliber"
+              onSelect={ setOptionsSelected }
+              optionSelected={ optionsSelected.caliber }
+              optionsList={ products.find(product => product.code === optionsSelected.productCode)?.calibers }
+
+            />
+          )
+        }
         <OptionsList
           title="Box brand:"
           property="boxBrandCode"

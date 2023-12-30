@@ -4,7 +4,7 @@ import { SelectedOptions } from "./NewPalletDrawer"
 type OptionsList = {
   title: string
   property: keyof SelectedOptions
-  optionsList: string[]
+  optionsList: string[] | undefined
   onSelect: React.Dispatch<React.SetStateAction<SelectedOptions>>
   optionSelected: string | undefined
 }
@@ -17,7 +17,7 @@ export const OptionsList = ({ title, property, optionsList, onSelect, optionSele
         { title }
       </h4>
       <div className="options__list">
-        { optionsList.map(opt => (
+        { optionsList?.map(opt => (
           <Button
             text={ opt.toUpperCase() }
             className={ `options__btn options__btn${opt === optionSelected
