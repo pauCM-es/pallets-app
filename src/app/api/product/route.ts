@@ -3,7 +3,7 @@ import prisma from "@/libs/prismadb";
 
 export const GET = async () => {
 	try {
-		const products = await prisma.boxBrand.findMany();
+		const products = await prisma.product.findMany();
 
 		return NextResponse.json(products);
 	} catch (error) {

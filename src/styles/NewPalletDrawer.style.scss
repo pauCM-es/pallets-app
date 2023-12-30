@@ -3,11 +3,53 @@
 .new-pallet-drawer__content {
 	@include variables.panel-drawer-base;
 
-	& .content__id-input {
-		height: 3rem;
-		margin: 1rem 0;
-		width: var(--pad-width);
-		background: #fff;
-		border: 1px solid #f9f9f9;
+	& .content {
+		&__title {
+			color: var(--font-color);
+			width: var(--pad-width);
+			font-size: var(--font-l);
+			padding-bottom: 0.5rem;
+			border-bottom: 2px solid var(--font-color);
+		}
+
+		&__id-input {
+			height: 3rem;
+			margin: 1rem 0;
+			width: var(--pad-width);
+			background: #fff;
+			border: 1px solid #f9f9f9;
+		}
+
+		&__action-btns {
+			display: flex;
+			justify-content: space-between;
+			width: var(--pad-width);
+			margin: 1rem 0;
+		}
+
+		&__properties-list {
+			width: 100%;
+
+			& .property {
+				padding: 0.5rem 1rem;
+				width: 100%;
+
+				& .options {
+					&__list {
+						display: flex;
+						flex-direction: row;
+						gap: 0.5rem;
+						// overflow-x: scroll;
+					}
+					&__btn {
+						width: 3rem;
+						height: 3rem;
+						&--selected {
+							background-color: var(--color-primary);
+						}
+					}
+				}
+			}
+		}
 	}
 }
