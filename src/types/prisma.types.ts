@@ -1,6 +1,9 @@
-import { Pallet } from "@prisma/client";
+import { Camara, Pallet, Shelf } from "@prisma/client";
 
-export interface PalletsOnShelf {
-	shelfId: string;
-	pallets: Pallet[];
+export interface GetCamaraResponse {
+	camara: Camara;
+	palletsOnCamara: Pallet[];
+	shelves: Shelf[];
 }
+
+export type Position = Exclude<Pallet["position"], null>;

@@ -1,27 +1,47 @@
-import { PalletsOnShelf } from "@/types/prisma.types";
 import { EmptyShelf } from "@/types/shelf.types";
 import prisma from "@/libs/prismadb";
 import { NextResponse } from "next/server";
-import { Shelf } from "@prisma/client";
+import { Pallet, Shelf } from "@prisma/client";
+import { ItemsByShelf } from "@/types/camara.types";
 
-// update positions on a list of pallets involves in a movement
+// update positions of pallets involved in a movement
 export const PATCH = async (request: Request) => {
 	try {
-		const body: PalletsOnShelf[] = await request.json();
-		const updatedShelves: Shelf[] = [];
-		body.forEach(async (shelf) => {
-			const shelfDb = await prisma.shelf.update({
-				where: {
-					name: shelf.shelfId,
-				},
-				data: {
-					palletIds: shelf.pallets.map((pallet) => pallet.numberId),
-				},
+		const body: ItemsByShelf = await request.json();
+		const updatedShelves: {
+			[key: string]: Pallet[];
+		} = {};
+
+		// store the update action for each item to call then later on a transaction at the same time
+		const transactions: any[] = [];
+
+		for (const [shelfName, palletsList] of Object.entries(body)) {
+			updatedShelves[shelfName] = [];
+
+			palletsList.forEach(async (pallet) => {
+				const updateAction = prisma.pallet.update({
+					where: {
+						id: pallet.id,
+					},
+					data: {
+						position: { ...pallet.position },
+					},
+				});
+				transactions.push(updateAction);
 			});
-			updatedShelves.push(shelfDb);
+		}
+
+		const allPalletsUpdated = await prisma.$transaction(transactions);
+
+		// to return the same object. Pallets ordered by shelf
+		allPalletsUpdated.forEach((pallet) => {
+			updatedShelves[pallet.position.shelfId] = [
+				...updatedShelves[pallet.position.shelfId],
+				pallet,
+			];
 		});
 
-		return NextResponse.json({ updatedShelves });
+		return NextResponse.json(updatedShelves);
 	} catch (error) {
 		return new NextResponse(`Internal error: ${error}`, { status: 500 });
 	}

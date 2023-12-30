@@ -1,0 +1,19 @@
+.dashboard {
+	&__camara-btn {
+		margin: 2rem;
+		& .camara {
+			&-btn {
+				&__icon {
+					& svg {
+						width: 2rem;
+						height: 2rem;
+					}
+					margin-left: 1rem;
+				}
+				&__text {
+					padding: 0 1rem;
+				}
+			}
+		}
+	}
+}

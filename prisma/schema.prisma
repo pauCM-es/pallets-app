@@ -16,6 +16,12 @@ model User {
   updatedAt DateTime? @updatedAt
 }
 
+type position {
+  shelfId String
+  height  Int
+  index   Int
+}
+
 model Pallet {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   numberId String  @unique
@@ -24,7 +30,8 @@ model Pallet {
   pieces   Int?
   boxBrand String?
 
-  position   Int[]
+  position position?
+
   camaraCode String
   shipped    Boolean @default(false)
   selected   Boolean @default(false)
@@ -56,22 +63,20 @@ model Product {
 }
 
 model Camara {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  code       String @unique
-  name       String
-  shelvesNum Int?
-  heights    Int?
-  perShelf   Int?
-  perHeight  Int?
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  code   String @unique
+  name   String
+  width  Int?
+  length Int?
 
   shelves Shelf[]
 }
 
 model Shelf {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
-
-  palletIds String[]
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  height Int?   @default(1)
+  length Int
 
   camaraId String
   camara   Camara @relation(fields: [camaraId], references: [code])

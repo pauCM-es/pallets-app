@@ -1,11 +1,8 @@
 import { AddPallet } from "@/types/pallet.types";
-import { PalletsOnShelf } from "@/types/prisma.types";
 import { Pallet } from "@prisma/client";
 import axios, { AxiosPromise, AxiosRequestConfig } from "axios";
 
-export const deletePallet = (
-	palletId: string
-): AxiosPromise<PalletsOnShelf[]> => {
+export const deletePallet = (palletId: string): AxiosPromise<Pallet> => {
 	const config: AxiosRequestConfig = {
 		url: `${process.env.BASE_URL}api/pallet/${palletId}`,
 		method: "DELETE",
@@ -16,7 +13,7 @@ export const deletePallet = (
 
 export const addNewPallet = (
 	newPalletData: AddPallet
-): AxiosPromise<PalletsOnShelf[]> => {
+): AxiosPromise<Pallet> => {
 	const config: AxiosRequestConfig = {
 		url: `${process.env.BASE_URL}api/pallet`,
 		method: "POST",

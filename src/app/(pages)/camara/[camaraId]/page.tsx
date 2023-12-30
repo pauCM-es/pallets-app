@@ -1,6 +1,9 @@
 import { getCamaraById } from "@/app/services/camara.service"
 import EmptySpace from "@/components/EmptySpace"
 import { SideDrawer } from "@/components/SideDrawer"
+import { orderItemsByIndexPosition } from "@/helpers/camaras-interactions"
+import { ItemsByShelf, PalletItem } from "@/types/camara.types"
+import { Pallet } from "@prisma/client"
 
 
 interface Params {
@@ -14,13 +17,22 @@ const CamaraIdPage = async ({
 }) => {
 
   const res = await getCamaraById(params.camaraId)
-  const { palletsOnShelves } = res.data
+  const { camara, palletsOnCamara, shelves } = res.data
+
+  const itemsGroupedByShelf: ItemsByShelf = {}
+  shelves.map(shelf => {
+    const orderedItemsOnShelf = orderItemsByIndexPosition(
+      palletsOnCamara.filter((pallet) => (pallet.position?.shelfId === shelf.name))
+    )
+    itemsGroupedByShelf[shelf.name] = orderedItemsOnShelf
+  })
 
   return (
     <>
       <SideDrawer
-        children={ <EmptySpace palletsOnShelves={ palletsOnShelves } /> }
-        palletsData={ palletsOnShelves }
+        children={ <EmptySpace itemsGroupedByShelf={ itemsGroupedByShelf } /> }
+        palletsData={ palletsOnCamara }
+        camara={ camara }
       />
     </>
   )
