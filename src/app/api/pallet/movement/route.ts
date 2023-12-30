@@ -1,4 +1,3 @@
-import { EmptyShelf } from "@/types/shelf.types";
 import prisma from "@/libs/prismadb";
 import { NextResponse } from "next/server";
 import { Pallet, Shelf } from "@prisma/client";
