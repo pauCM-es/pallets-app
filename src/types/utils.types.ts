@@ -4,6 +4,10 @@ export type HalfPartial<T, P extends keyof T> = {
 	[Key in keyof T]: Key extends P ? T[Key] : T[Key] | undefined;
 };
 
+export type MakeOptional<T> = {
+	[Key in keyof T]?: T[Key];
+};
+
 export type InferStringLiteral<S> = S extends string
 	? string
 	: S extends number

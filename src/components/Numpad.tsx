@@ -4,12 +4,22 @@ import { ClickEvent } from 'devextreme/ui/button'
 import "@/styles/Numpad.style.scss"
 
 type NumpadProps = {
-  handleBtnClick: (e: ClickEvent) => void
+  setInput: React.Dispatch<React.SetStateAction<string>>
 }
-export const Numpad = ({ handleBtnClick }: NumpadProps) => {
+export const Numpad = ({ setInput }: NumpadProps) => {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "abc", "0", "<"]
 
-
+  const handleNumberClick = (key: string) => {
+    setInput(prev => {
+      return `${prev}${key}`
+    })
+  }
+  const handleDeleteClick = () => {
+    setInput(prev => {
+      if (prev.length <= 0) return ""
+      return prev.slice(0, prev.length - 1)
+    })
+  }
 
   return (
     <section className="numpad">
@@ -21,7 +31,8 @@ export const Numpad = ({ handleBtnClick }: NumpadProps) => {
             text={ key }
             type='normal'
             stylingMode='contained'
-            onClick={ (e) => handleBtnClick(e) }
+            onClick={ key === "<" ? handleDeleteClick : () => handleNumberClick(key)
+            }
           />)
         }
       </ul>

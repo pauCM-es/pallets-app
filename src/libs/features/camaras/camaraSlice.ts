@@ -1,3 +1,4 @@
+import { AddPallet, PalletMinRequired } from "@/types/pallet.types";
 import { BoxBrand, Pallet, Product } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 import type { Draft, PayloadAction } from "@reduxjs/toolkit";
@@ -7,6 +8,7 @@ interface CamaraState {
 	palletsOnCurrentCamara: Pallet[] | undefined;
 	products: Product[];
 	boxBrands: BoxBrand[];
+	palletOnEdit: undefined | PalletMinRequired;
 }
 
 const initialState: CamaraState = {
@@ -14,6 +16,7 @@ const initialState: CamaraState = {
 	palletsOnCurrentCamara: undefined,
 	products: [],
 	boxBrands: [],
+	palletOnEdit: undefined,
 };
 
 export const camaraSlice = createSlice({

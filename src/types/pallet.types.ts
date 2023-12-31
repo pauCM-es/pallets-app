@@ -1,5 +1,5 @@
 import { Pallet } from "@prisma/client";
-import { HalfPartial, ReplaceObjPropType } from "./utils.types";
+import { HalfPartial, MakeOptional, ReplaceObjPropType } from "./utils.types";
 
 export type AddPallet = HalfPartial<
 	Pallet,
@@ -7,3 +7,8 @@ export type AddPallet = HalfPartial<
 >;
 
 export type ItemPlaceholder = { numberId: "empty" };
+
+type PalletMinInfo = Pick<Pallet, "numberId" | "product">;
+type PalletOptionalInfo = MakeOptional<Omit<Pallet, "numberId" | "product">>;
+
+export type PalletMinRequired = PalletMinInfo & PalletOptionalInfo;
