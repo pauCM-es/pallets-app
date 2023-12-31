@@ -11,13 +11,15 @@ export type SelectedOptions = {
   caliber: undefined | string
   size: undefined | string
   boxBrandCode: undefined | string
+  palletSize: "EU" | "IN"
 }
 
-const initialStateOptions = {
+const initialStateOptions: SelectedOptions = {
   productCode: undefined,
   caliber: undefined,
   size: undefined,
-  boxBrandCode: undefined
+  boxBrandCode: undefined,
+  palletSize: "EU"
 }
 
 export const NewPalletDrawer = () => {
@@ -89,6 +91,14 @@ export const NewPalletDrawer = () => {
         showScrollbar="always"
       >
         <section>
+          <OptionsList
+            key={ "palletSize-list" }
+            title="Pallet size:"
+            property="palletSize"
+            onSelect={ setOptionsSelected }
+            optionSelected={ optionsSelected.palletSize }
+            optionsList={ ["EU", "IN"] }
+          />
 
           <OptionsList
             key={ "product-list" }
