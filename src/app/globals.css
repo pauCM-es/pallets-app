@@ -31,7 +31,7 @@ body {
 
 [data-theme="dark"] {
   --mode: "dark";
-  --font-color: #e1e1e1;
+  --font-color: #dadada;
   --font-color-accent: #ffffff;
   --font-color-contrast: #575b69;
   --background: #12171d;

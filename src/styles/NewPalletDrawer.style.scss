@@ -4,8 +4,8 @@
 	@include variables.panel-drawer-base;
 
 	& .content {
+		color: var(--font-color);
 		&__title {
-			color: var(--font-color);
 			width: var(--pad-width);
 			font-size: var(--font-l);
 			padding-bottom: 0.5rem;
@@ -16,8 +16,8 @@
 			height: 3rem;
 			margin: 1rem 0;
 			width: var(--pad-width);
-			background: #fff;
-			border: 1px solid #f9f9f9;
+			// background: #fff;
+			// border: 1px solid #f9f9f9;
 		}
 
 		&__action-btns {
@@ -27,23 +27,44 @@
 			margin: 1rem 0;
 		}
 
-		&__properties-list {
+		&__properties-scroll-view {
+			--opt-size: 3rem;
+
 			width: 100%;
+			border-radius: 0.25rem;
+			padding: 0.25rem;
+			margin-bottom: 2rem;
 
 			& .property {
 				padding: 0.5rem 1rem;
 				width: 100%;
 
+				&__title {
+					font-size: var(--font-m);
+					margin-bottom: 0.5rem;
+					span {
+						font-size: var(--font-l);
+						margin-left: 1rem;
+						color: var(--font-color-accent);
+					}
+				}
+
 				& .options {
+					&__scroll-view {
+						height: fit-content;
+						overflow-y: hidden;
+						// border: 1px solid var(--background-accent);
+						border-radius: 0.25rem;
+						padding: 0.5rem;
+					}
 					&__list {
 						display: flex;
 						flex-direction: row;
 						gap: 0.5rem;
-						// overflow-x: scroll;
 					}
 					&__btn {
-						width: 3rem;
-						height: 3rem;
+						width: var(--opt-size);
+						height: var(--opt-size);
 						&--selected {
 							background-color: var(--color-primary);
 						}
