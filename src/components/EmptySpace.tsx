@@ -40,7 +40,7 @@ const EmptySpace = ({
     initialPositionsRef,
     activePallet,
     currentPositions
-  } = useMovePalet(palletsGroupedByShelf)
+  } = useMovePalet(itemsGroupedByShelf)
 
 
   useEffect(() => {
@@ -56,15 +56,6 @@ const EmptySpace = ({
       dispatch(setData({ key: "currentCamaraId", value: "" }))
     }
   }, [])
-
-  useEffect(() => {
-    console.log('currentPositions :', currentPositions)
-  }, [currentPositions])
-  useEffect(() => {
-    console.log('palletsGroupedByShelf :', palletsGroupedByShelf)
-  }, [palletsGroupedByShelf])
-
-
 
   return (
     <section className="empty-space">
