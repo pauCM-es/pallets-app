@@ -5,11 +5,18 @@ import { ItemsByShelf, PalletItem } from "@/types/camara.types";
 import { updatePositionOnShelf } from "@/helpers/camaras-interactions";
 import { updateAfterMove } from "@/app/services/camara.service";
 import "@/styles/EmptySpace.style.scss";
+import { CamaraState } from "@/libs/features/camaras/camaraSlice";
+import { useAppSelector } from "@/libs/store";
 
-export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
-	const initialPositionsRef = useRef<ItemsByShelf>(itemsGroupedByShelf);
-	const [currentPositions, setCurrentPositions] =
-		useState<ItemsByShelf>(itemsGroupedByShelf);
+export const useMovePalet = (
+	itemsGroupedByShelf: CamaraState["palletsGroupedByShelf"]
+) => {
+	const initialPositionsRef = useRef<ItemsByShelf | undefined>(
+		itemsGroupedByShelf
+	);
+	const [currentPositions, setCurrentPositions] = useState<
+		ItemsByShelf | undefined
+	>(itemsGroupedByShelf);
 	const [activePallet, setActivePallet] = useState<PalletItem | null>(null);
 	const [movement, setMovement] = useState<{
 		fromShelf: undefined | string;
@@ -19,8 +26,16 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 		toShelf: undefined,
 	});
 
+	const { palletsGroupedByShelf } = useAppSelector((state) => state.camara);
+
 	useEffect(() => {
-		if (!movement.fromShelf || !movement.toShelf) return;
+		setCurrentPositions(palletsGroupedByShelf);
+		initialPositionsRef.current = palletsGroupedByShelf;
+	}, [palletsGroupedByShelf]);
+
+	useEffect(() => {
+		if (!movement.fromShelf || !movement.toShelf || !currentPositions)
+			return;
 		const shelvesInvolved: ItemsByShelf = {
 			[movement.fromShelf]: currentPositions[movement.fromShelf],
 			[movement.toShelf]: currentPositions[movement.toShelf],
@@ -35,15 +50,16 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 				setCurrentPositions(initialPositionsRef.current);
 				console.log("error :", error);
 			});
-		console.log("shelvesInvolved :", shelvesInvolved);
 		setMovement({ fromShelf: undefined, toShelf: undefined });
 	}, [movement]);
 
 	const onDragStart = (evt: DragStartEvent) => {
+		if (!currentPositions) return;
+
 		const id = evt.active.id;
 		const shelf: string = evt.active.data.current?.sortable.containerId;
 		const index = evt.active.data.current?.sortable.index;
-		const activePalletData = initialPositionsRef.current[shelf][index];
+		const activePalletData = initialPositionsRef.current?.[shelf][index];
 
 		if (activePalletData?.numberId !== "empty") {
 			activePalletData && setActivePallet(activePalletData);
@@ -54,7 +70,8 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragMove = (evt: DragMoveEvent) => {
-		if (!activePallet || !activePallet?.position) return;
+		if (!activePallet || !activePallet?.position || !currentPositions)
+			return;
 
 		const { active, over } = evt;
 		let activePalletId = active?.data.current?.sortable?.index;
@@ -65,23 +82,17 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 
 		//move involve diferent shelves
 		if (prevShelfId !== newShelfId) {
-			let prevPositions = { ...currentPositions };
+			let prevPositions = JSON.parse(JSON.stringify(currentPositions));
+			const palletIndexToRemove = activePallet.position.index;
 
 			//remove pallet from prev shelf and update it if there's still items on it.
-			prevPositions[prevShelfId].splice(activePallet.position.index, 1);
+			prevPositions[prevShelfId]?.length &&
+				prevPositions[prevShelfId]?.splice(palletIndexToRemove, 1);
 			if (prevPositions[prevShelfId].length) {
 				prevPositions[prevShelfId] = updatePositionOnShelf(
 					prevPositions[prevShelfId]
 				);
-				console.log(
-					"updating prev shelf to:",
-					prevPositions[prevShelfId]
-				);
 			}
-			console.log(
-				"NO update prev shelf. to:",
-				prevPositions[prevShelfId]
-			);
 
 			const palletUpdated = {
 				...activePallet,
@@ -123,7 +134,7 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 			)
 				return;
 
-			let prevPositions = { ...currentPositions };
+			let prevPositions = JSON.parse(JSON.stringify(currentPositions));
 
 			prevPositions[activePallet.position.shelfId] = arrayMove(
 				prevPositions[activePallet.position.shelfId],
@@ -151,8 +162,6 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragEnd = (evt: DragEndEvent) => {
-		console.log("Positions on END :", currentPositions);
-
 		setActivePallet(null);
 		setMovement((oldState) => {
 			return { ...oldState, toShelf: activePallet?.position.shelfId };

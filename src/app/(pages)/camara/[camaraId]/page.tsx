@@ -30,9 +30,14 @@ const CamaraIdPage = async ({
   return (
     <>
       <SideDrawer
-        children={ <EmptySpace itemsGroupedByShelf={ itemsGroupedByShelf } /> }
-        palletsData={ palletsOnCamara }
-        camara={ camara }
+        children={ <EmptySpace
+          itemsGroupedByShelf={ itemsGroupedByShelf }
+          palletsData={ palletsOnCamara }
+          camara={ camara }
+          shelves={ shelves }
+        />
+        }
+
       />
     </>
   )
