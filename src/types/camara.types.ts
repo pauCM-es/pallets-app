@@ -30,3 +30,9 @@ export const hasShelfItems = (
 ): shelf is PalletItem[] => {
 	return (shelf as PalletItem[])[0].numberId !== "empty";
 };
+
+export const hasPosition = (
+	pallet: Pallet | PalletItem
+): pallet is PalletItem => {
+	return (pallet as PalletItem).position !== null;
+};

@@ -1,11 +1,14 @@
+import { ItemsByShelf, PalletItem } from "@/types/camara.types";
 import { AddPallet, PalletMinRequired } from "@/types/pallet.types";
-import { BoxBrand, Pallet, Product } from "@prisma/client";
+import { BoxBrand, Pallet, Product, Shelf } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 import type { Draft, PayloadAction } from "@reduxjs/toolkit";
 
-interface CamaraState {
+export interface CamaraState {
 	currentCamaraId: string;
 	palletsOnCurrentCamara: Pallet[] | undefined;
+	shelvesOnCamera: Shelf[] | undefined;
+	palletsGroupedByShelf: ItemsByShelf | undefined;
 	products: Product[];
 	boxBrands: BoxBrand[];
 	palletOnEdit: undefined | PalletMinRequired;
@@ -14,6 +17,8 @@ interface CamaraState {
 const initialState: CamaraState = {
 	currentCamaraId: "",
 	palletsOnCurrentCamara: undefined,
+	shelvesOnCamera: undefined,
+	palletsGroupedByShelf: undefined,
 	products: [],
 	boxBrands: [],
 	palletOnEdit: undefined,
@@ -35,9 +40,29 @@ export const camaraSlice = createSlice({
 		) => {
 			state[action.payload.key] = action.payload.value;
 		},
+		updateWithNewPallet: (state, action: PayloadAction<PalletItem>) => {
+			if (
+				!state.palletsGroupedByShelf ||
+				!state.palletsOnCurrentCamara ||
+				!action.payload.position
+			)
+				return;
+			const shelfName = action.payload.position?.shelfId;
+			const palletIndex = action.payload.position?.index;
+			state.palletsOnCurrentCamara = [
+				...state.palletsOnCurrentCamara,
+				action.payload,
+			];
+			state.palletsGroupedByShelf[shelfName].splice(
+				palletIndex,
+				0,
+				action.payload
+			);
+		},
 	},
 });
 
-export const { setPalletsData, setData } = camaraSlice.actions;
+export const { setPalletsData, setData, updateWithNewPallet } =
+	camaraSlice.actions;
 
 export default camaraSlice.reducer;

@@ -14,7 +14,7 @@ interface ShelfProps {
   id: string
 }
 
-const Shelf = ({ children, title, id }: ShelfProps) => {
+export const ShelfItem = ({ children, title, id }: ShelfProps) => {
 
   return (
     <div className={ `shelf` }
@@ -27,5 +27,3 @@ const Shelf = ({ children, title, id }: ShelfProps) => {
 
   )
 }
-
-export default Shelf

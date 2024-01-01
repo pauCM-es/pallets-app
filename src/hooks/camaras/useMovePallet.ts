@@ -5,11 +5,17 @@ import { ItemsByShelf, PalletItem } from "@/types/camara.types";
 import { updatePositionOnShelf } from "@/helpers/camaras-interactions";
 import { updateAfterMove } from "@/app/services/camara.service";
 import "@/styles/EmptySpace.style.scss";
+import { CamaraState } from "@/libs/features/camaras/camaraSlice";
 
-export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
-	const initialPositionsRef = useRef<ItemsByShelf>(itemsGroupedByShelf);
-	const [currentPositions, setCurrentPositions] =
-		useState<ItemsByShelf>(itemsGroupedByShelf);
+export const useMovePalet = (
+	palletsGroupedByShelf: CamaraState["palletsGroupedByShelf"]
+) => {
+	const initialPositionsRef = useRef<ItemsByShelf | undefined>(
+		palletsGroupedByShelf
+	);
+	const [currentPositions, setCurrentPositions] = useState<
+		ItemsByShelf | undefined
+	>(palletsGroupedByShelf);
 	const [activePallet, setActivePallet] = useState<PalletItem | null>(null);
 	const [movement, setMovement] = useState<{
 		fromShelf: undefined | string;
@@ -20,7 +26,13 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	});
 
 	useEffect(() => {
-		if (!movement.fromShelf || !movement.toShelf) return;
+		setCurrentPositions(palletsGroupedByShelf);
+		initialPositionsRef.current = palletsGroupedByShelf;
+	}, [palletsGroupedByShelf]);
+
+	useEffect(() => {
+		if (!movement.fromShelf || !movement.toShelf || !currentPositions)
+			return;
 		const shelvesInvolved: ItemsByShelf = {
 			[movement.fromShelf]: currentPositions[movement.fromShelf],
 			[movement.toShelf]: currentPositions[movement.toShelf],
@@ -40,10 +52,12 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	}, [movement]);
 
 	const onDragStart = (evt: DragStartEvent) => {
+		if (!currentPositions) return;
+
 		const id = evt.active.id;
 		const shelf: string = evt.active.data.current?.sortable.containerId;
 		const index = evt.active.data.current?.sortable.index;
-		const activePalletData = initialPositionsRef.current[shelf][index];
+		const activePalletData = initialPositionsRef.current?.[shelf][index];
 
 		if (activePalletData?.numberId !== "empty") {
 			activePalletData && setActivePallet(activePalletData);
@@ -54,7 +68,8 @@ export const useMovePalet = (itemsGroupedByShelf: ItemsByShelf) => {
 	};
 
 	const onDragMove = (evt: DragMoveEvent) => {
-		if (!activePallet || !activePallet?.position) return;
+		if (!activePallet || !activePallet?.position || !currentPositions)
+			return;
 
 		const { active, over } = evt;
 		let activePalletId = active?.data.current?.sortable?.index;

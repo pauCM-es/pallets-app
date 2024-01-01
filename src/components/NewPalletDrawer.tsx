@@ -46,9 +46,9 @@ export const NewPalletDrawer = () => {
     })
   }, [optionsSelected.productCode])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  }, [numberId])
+  // }, [numberId])
 
   const confirmData = useCallback(() => {
     if (!numberId || !optionsSelected.productCode ||

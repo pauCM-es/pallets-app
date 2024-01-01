@@ -1,6 +1,5 @@
 'use client'
 //libs
-import { useEffect, useState } from "react"
 import { Button, Drawer } from "devextreme-react"
 import { IoIosSearch, IoMdAdd, IoMdPricetag } from "react-icons/io"
 //components
@@ -9,9 +8,8 @@ import { NewPalletDrawer } from "./NewPalletDrawer"
 //store
 import { useAppDispatch, useAppSelector } from "@/libs/store"
 import { setDrawerState, setSidebarOption } from "@/libs/features/global/globalSlice"
-import { setPalletsData } from "@/libs/features/camaras/camaraSlice"
 //types
-import { Camara, Pallet } from "@prisma/client"
+
 //styles
 import '@/styles/SideDrawer.style.scss'
 
@@ -38,25 +36,13 @@ export const sidebarOptions = [
 
 interface SideDrawerProps {
   children: React.ReactNode,
-  palletsData: Pallet[],
-  camara: Camara
 }
 
 export const SideDrawer = ({
-  children,
-  palletsData,
-  camara
+  children
 }: SideDrawerProps) => {
   const { isSideDrawerOpen, sidebarOptionActive } = useAppSelector(state => state.global)
   const dispatch = useAppDispatch()
-
-
-  useEffect(() => {
-    dispatch(setPalletsData(palletsData))
-    console.log("palletData", palletsData)
-
-    return () => { dispatch(setPalletsData(undefined)) }
-  }, [])
 
   const drawerContent = () => {
     return (
