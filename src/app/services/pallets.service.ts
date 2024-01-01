@@ -1,4 +1,4 @@
-import { AddPallet } from "@/types/pallet.types";
+import { AddPallet, PalletMinRequired } from "@/types/pallet.types";
 import { Pallet } from "@prisma/client";
 import axios, { AxiosPromise, AxiosRequestConfig } from "axios";
 
@@ -12,7 +12,7 @@ export const deletePallet = (palletId: string): AxiosPromise<Pallet> => {
 };
 
 export const addNewPallet = (
-	newPalletData: AddPallet
+	newPalletData: PalletMinRequired
 ): AxiosPromise<Pallet> => {
 	const config: AxiosRequestConfig = {
 		url: `${process.env.BASE_URL}api/pallet`,

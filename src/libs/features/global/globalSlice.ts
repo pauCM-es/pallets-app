@@ -1,11 +1,10 @@
+import { OptionsList } from "@/types/camara.types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { SidebarOptions } from "@/components/SideDrawer";
-import { PalletsOnShelf } from "@/types/prisma.types";
 
 interface GlobalState {
 	isSideDrawerOpen: boolean;
-	sidebarOptionActive: SidebarOptions | undefined;
+	sidebarOptionActive: OptionsList | undefined;
 }
 
 const initialState: GlobalState = {
