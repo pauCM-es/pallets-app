@@ -17,19 +17,7 @@ const SearchPalletDrawer = () => {
   return (
     <div className='search-drawer__content'>
 
-      <Lookup
-        className='search__lookup'
-        dataSource={ palletsOnCurrentCamara }
-        valueExpr={ "numberId" }
-        displayExpr={ "numberId" }
-        itemTemplate={ resultTemplate }
-        searchMode='contains'
-        visible={ true }
-      />
-      <Numpad />
-      <section className="search-drawer__options">
 
-      </section>
     </div>
   )
 }
